@@ -131,6 +131,7 @@ function registrarSolicitudResetPass($conexion, $correo) {
     if (comprobarSolicitudResetPass($conexion, $correo)) {
         echo "La solitud ya existe";
         // La solicitud ya existe, la borramos y creamos una nueva
+        //Probar query, no borra ninguna entrada
         $query = mysqli_query($conexion, "DELETE FROM RESET_PASS WHERE correo = '$correo'");
     } 
     // Si no existe simplemente creamos una
