@@ -1,0 +1,10 @@
+.contenido {
+    margin: auto;
+    width: 33%;
+    height: 50%;
+    padding: 10px;
+
+    margin-top: 10%;
+    text-align: center;
+    background-color: #8a2be2;
+}
