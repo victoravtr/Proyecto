@@ -170,10 +170,19 @@
           
                 // comprobamos si la base de datos "AADAD" existe"
                 if (existeBD($conexion)) {
-      
-                  // Si existe cambiamos la contraseña
-                  cambiarPass($conexion, $pass, $codigo);
-                  echo "<h1>La contraseña ha sido cambiada</h1>";
+                  
+                  // Comprobamos que el codigo existe
+                  if (comprobarCodigo($conexion, $codigo)) {
+
+                    // Si existe cambiamos la contraseña
+                    echo "<p>Cambiamos la contraseña</p>";
+                    cambiarPass($conexion, $pass, $codigo);
+                    echo "<h1>La contraseña ha sido cambiada</h1>";
+                  } else {
+
+                    $cadena_errores_bd = $cadena_errores_bd."\\n El codigo de solicitud no es valido.";
+                  }
+                  
                 } else {
           
                   // Si no existe mostramos un mensaje de error
