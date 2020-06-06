@@ -22,12 +22,19 @@
 
     <div class="card">
         <div class="contenido">
-            <input type="submit" class="boton" name="login" value="Añadir equipos a dominio"/>
+            <form action="index.php" method="post">
+                <input type="submit" class="boton" name="login" value="Añadir equipos a dominio"/>
+            </form>
         </div>
         
     </div>
 </div>
 
+<?php
+    if (isset($_POST["login"])) {
+        header("Location:dominio.php");
+    }
 
+?>
 </body>
 </html>
