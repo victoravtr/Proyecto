@@ -154,10 +154,14 @@ function cambiarPass($conexion, $pass, $codigo){
     // Buscamos el correo asociado al codigo que le pasamos por el GET
     // Generamor la nueva contraseña y actualizamos la base de datos
     // Si todo ha salido bien borramos la solicitud
-
     $correo = mysqli_query($conexion, "SELECT correo FROM RESET_PASS WHERE codigo = '$codigo'");
+    $correo = mysqli_fetch_row($correo)[0];
+    
     $pass = password_hash($pass, PASSWORD_DEFAULT);
     $query = mysqli_query($conexion, "UPDATE CREDENCIALES SET pass = '$pass' WHERE correo = '$correo'");
+
+    $borrado = mysqli_query($conexion, "DELETE FROM RESET_PASS WHERE correo = '$correo'");
+    return $query;
 }
 
 // Comprobamos que los codigos que se le pasan como parametro existan en la base de datos

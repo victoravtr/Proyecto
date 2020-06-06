@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<form action="test.php" method="POST" class="card" autocomplete="off">
+<form action="<?php $_SERVER['PHP_SELF'] ?>" method="POST" class="card" autocomplete="off">
 
   <h1>¿Has olvidado tu contraseña?</h1>
 
@@ -175,9 +175,13 @@
                   if (comprobarCodigo($conexion, $codigo)) {
 
                     // Si existe cambiamos la contraseña
-                    echo "<p>Cambiamos la contraseña</p>";
-                    cambiarPass($conexion, $pass, $codigo);
-                    echo "<h1>La contraseña ha sido cambiada</h1>";
+                    $check = cambiarPass($conexion, $pass, $codigo);
+                    if ($check) {
+                      echo "<h1>La contraseña ha sido cambiada</h1>";
+                    } else {
+                      $cadena_errores_bd = $cadena_errores_bd."\\n Ha habido un error al cambiar la contraseña.";
+                    }
+                    
                   } else {
 
                     $cadena_errores_bd = $cadena_errores_bd."\\n El codigo de solicitud no es valido.";
