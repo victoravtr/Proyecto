@@ -7,3 +7,7 @@
 - [ ] Revisar que las funciones están comentadas
 - [ ] Revisar los outputs y dejarlos bonitos (Caja transparente con borde verde por ejemplo)
 - [ ] Pasar eñ contenido de test.php a contra.php
+- [ ] Hacer listado de requisitos y de instalación
+  - [ ] LAMP
+  - [ ] Libreria para ssh y herramientas para instalarla
+  - [ ] Lo que uso para el correo
