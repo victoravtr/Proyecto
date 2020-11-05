@@ -13,6 +13,7 @@
   - [ ] Lo que uso para el correo
 - [ ] Crear script bash para instalacion de requisitos
   - [ ] Necesita tener:
+    - [ ] net-tools
     - [ ] MySQL
     - [ ] Apache2
   - [ ] Quitar las funciones de php que crean las tablas de la base de datos y meterlas en un .sql
