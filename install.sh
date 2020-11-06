@@ -18,6 +18,9 @@ Green='\033[0;32m'        # Green
 Blue='\033[0;33m'        # Blue
 Yellow='\033[0;36m'        # Yellow
 
+# Almacenamos el directorio actual
+INSTALL_DIR=$(pwd)
+
 # Comprobamos si EUID esta vacio y le asignamos un valor
 # SI esta vacio es que ya es root
 echo -e "${Blue}Comprobando si se ejecuta con sudo: $Color_Off"
@@ -92,28 +95,61 @@ echo -e "$Green [+] Archivo /etc/hosts comprobado $Color_Off"
 
 # Comprobamos si ya existen las carpetas en /var/www
 echo -e "${Blue}\nComprobando carpetas en /var/www/: $Color_Off"
-if [ -d "/var/www/proyecto" ]; then
-
+if ! [ -d "/var/www/proyecto" ]; then
+    echo -e "$Red [-] Error: no existe la carpeta /var/www/proyecto $Color_Off"
+    echo  -e "$Yellow  [+] Creando la carpeta /var/www/proyecto $Color_Off"
+    mkdir /var/www/proyecto
 fi
+echo -e "$Green [+] Carpeta /var/www/proyecto creada $Color_Off"
+
+if ! [ -d "/var/www/doc-proyecto" ]; then
+    echo -e "$Red [-] Error: no existe la carpeta /var/www/doc-proyecto $Color_Off"
+    echo  -e "$Yellow  [+] Creando la carpeta /var/www/doc-proyecto $Color_Off"
+    mkdir /var/www/doc-proyecto
+fi
+echo -e "$Green [+] Carpeta /var/www/doc-proyecto creada $Color_Off"
+
+echo -e "$Green [+] Carpetas creadas $Color_Off"
+
+# Comprobamos si las carpetas estan vacias
+# Si lo estan copiamos los archivos en ellas
+
+echo -e "${Blue}\nComprobando contenido de las carpetas: $Color_Off"
+if [ -z "$(ls -A /var/www/proyecto)" ]; then
+  # Copiamos el contenido de Web-Proyecto-Content/ en /var/www/proyecto
+  echo -e "$Red [-] Error: la carpeta /var/www/proyecto esta vacia. $Color_Off"
+  echo  -e "$Yellow  [+] Copiando contenido en /var/www/proyecto $Color_Off"
+  cp Web-Proyecto-Content/* /var/www/proyecto/
+fi
+
 
 # Comprobamos si ya se han copiado los archivos de configuracion en el directorio /etc/apache2/sites-available
 
 echo -e "${Blue}\nComprobando archivos de configuracion de apache2: $Color_Off"
 
-if ! [ -a "/etc/apache2/sites-available/doc-proyecto.conf" ]; then
-  echo -e "$Red [-] Error: no existe el archivo doc-proyecto.conf en /etc/apache2/sites-available. $Color_Off "
-  printf "$Yellow [?] Quieres que la cree por ti?[y/N] $Color_Off"
+if ! [ -a "/etc/apache2/sites-available/proyecto.conf" ]; then
+  echo -e "$Red [-] Error: no existe el archivo proyecto.conf en /etc/apache2/sites-available. $Color_Off "
+  printf "$Yellow [?] Quieres que lo cree por ti?[y/N] $Color_Off"
   read  decision
   if [[ "$decision" != "y" ]]; then
-    echo -e "$Red  [-] Para continuar con el instalador debes copiar el archivo /files/apache/doc-proyecto.conf en /etc/apache2/sites-available/ $Color_Off"
+    echo -e "$Red  [-] Para continuar con el instalador debes copiar el archivo /files/apache/proyecto.conf en /etc/apache2/sites-available/ $Color_Off"
     echo -e "$Red  [-] Puedes revisar como hacerlo en en http://$IP/posts/instalacion#apache2 $Color_Off"
     exit 1
   else
-    # Creamos la entrada
+    # Copiamos el archivo
     echo  -e "$Yellow  [+] Copiando archivo $Color_Off"
-
+    cp files/apache/proyecto.conf /etc/apache2/sites-available/proyecto.conf
+    # Activamos el sitio
+    # Al usar a2ensite desde fuera de sites-available falla, hacemos cd a la carpeta y volvemos
+    echo  -e "$Yellow  [+] Activando sitio $Color_Off"
+    cd /etc/apache2/sites-available/
+    a2ensite proyecto.conf
+    systemctl reload apache2
+    cd $INSTALL_DIR
   fi
 fi
+
+echo -e "$Green [+] Sitio creado $Color_Off"
 
 
 
