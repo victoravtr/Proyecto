@@ -32,13 +32,8 @@ fi
 if [[ $USER_ID = 0 ]]; then
     echo -e "$Green [+] already root $Color_Off"
 else
-    sudo -k # Pedimos password sudo
-    if sudo true; then
-        echo -e "$Green [+] correct password $Color_Off"
-    else
-        echo -e "$Red [-] wrong password $Color_Off"
-        exit 1
-    fi
+    echo -e "$Red  [-] Error: debes ejecutar el script con sudo. Ejemplo: sudo ./install.sh $Color_Off"
+    exit 1
 fi
 
 # Seguimos ejecutando el script como sudo
@@ -52,7 +47,7 @@ IP=$(hostname -I | sed 's/ *$//g')
 # Comprobamos si apache2 esta instalado
 echo -e "${Blue}\nComprobando instalacion de apache2: $Color_Off"
 if ! [ -x "$(command -v apache2)" ]; then
-  echo -e "$Red  [-] Error: apache2 no esta instalado. $Color_Off "
+  echo -e "$Red  [-] Error: apache2 no esta instalado. $Color_Off"
   printf "$Yellow  [?] Quieres que lo instale por ti?[y/N] $Color_Off"
   read  decision
   if [[ "$decision" != "y" ]]; then
@@ -98,14 +93,14 @@ echo -e "${Blue}\nComprobando carpetas en /var/www/: $Color_Off"
 if ! [ -d "/var/www/proyecto" ]; then
     echo -e "$Red [-] Error: no existe la carpeta /var/www/proyecto $Color_Off"
     echo  -e "$Yellow  [+] Creando la carpeta /var/www/proyecto $Color_Off"
-    mkdir /var/www/proyecto
+    sudo mkdir /var/www/proyecto
 fi
 echo -e "$Green [+] Carpeta /var/www/proyecto creada $Color_Off"
 
 if ! [ -d "/var/www/doc-proyecto" ]; then
     echo -e "$Red [-] Error: no existe la carpeta /var/www/doc-proyecto $Color_Off"
     echo  -e "$Yellow  [+] Creando la carpeta /var/www/doc-proyecto $Color_Off"
-    mkdir /var/www/doc-proyecto
+    sudo mkdir /var/www/doc-proyecto
 fi
 echo -e "$Green [+] Carpeta /var/www/doc-proyecto creada $Color_Off"
 
@@ -119,12 +114,11 @@ if [ -z "$(ls -A /var/www/proyecto)" ]; then
   # Copiamos el contenido de Web-Proyecto-Content/ en /var/www/proyecto
   echo -e "$Red [-] Error: la carpeta /var/www/proyecto esta vacia. $Color_Off"
   echo  -e "$Yellow  [+] Copiando contenido en /var/www/proyecto $Color_Off"
-  cp Web-Proyecto-Content/* /var/www/proyecto/
+  sudo cp Web-Proyecto-Content/* /var/www/proyecto/
 fi
 
 
 # Comprobamos si ya se han copiado los archivos de configuracion en el directorio /etc/apache2/sites-available
-
 echo -e "${Blue}\nComprobando archivos de configuracion de apache2: $Color_Off"
 
 if ! [ -a "/etc/apache2/sites-available/proyecto.conf" ]; then
@@ -138,19 +132,37 @@ if ! [ -a "/etc/apache2/sites-available/proyecto.conf" ]; then
   else
     # Copiamos el archivo
     echo  -e "$Yellow  [+] Copiando archivo $Color_Off"
-    cp files/apache/proyecto.conf /etc/apache2/sites-available/proyecto.conf
+    sudo cp files/apache/proyecto.conf /etc/apache2/sites-available/proyecto.conf
     # Activamos el sitio
     # Al usar a2ensite desde fuera de sites-available falla, hacemos cd a la carpeta y volvemos
     echo  -e "$Yellow  [+] Activando sitio $Color_Off"
     cd /etc/apache2/sites-available/
-    a2ensite proyecto.conf
-    systemctl reload apache2
+    sudo a2ensite proyecto.conf
+    sudo systemctl reload apache2
     cd $INSTALL_DIR
   fi
 fi
 
 echo -e "$Green [+] Sitio creado $Color_Off"
 
+# Comprobamos si php esta instalado
+echo -e "${Blue}\nComprobando instalacion de php: $Color_Off"
+if ! [ -x "$(command -v php)" ]; then
+  echo -e "$Red  [-] Error: php no esta instalado. $Color_Off"
+  printf "$Yellow  [?] Quieres que lo instale por ti?[y/N] $Color_Off"
+  read  decision
+  if [[ "$decision" != "y" ]]; then
+    echo -e "$Red  [-] Para continuar con el instalador debes instalar php $Color_Off"
+    echo -e "$Red  [-] Puedes revisar como hacerlo en en http://$IP/posts/instalacion#php $Color_Off"
+    exit 1
+  else
+    # Instalamos apache2
+    echo "$Yellow  [+] Instalando php $Color_Off"
+    sudo apt install php
+  fi
+fi
+
+echo -e "$Green [+] php esta instalado $Color_Off"
 
 
 
