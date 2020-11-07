@@ -3,6 +3,8 @@
 
 #### TO-DO LIST
 - [ ] Cmbiar url script instalacion por las url de mi propia web o las del repositorio de github directamente
+- [ ] En el sitio proyecto.local incluir una pagina requisitos.php que compruebe si todo esta bien instalado
+  - [ ] 
 - [ ] Revisar que hacer cuando alguien intenta recuperar una contraseña con un codigo sin que ese codigo exista
 - [ ] Al cambiar la contraseña se tiene que borrar la solicitud
 - [ ] Revisar que las funciones están comentadas
