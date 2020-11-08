@@ -1,8 +1,14 @@
 **Proyecto**
 ========
 
+#### LO-QUE-VOY-HACIENDO LIST
+- Agosto +/- = version 1.0 del login
+- Del 26 Octubre al 8 de Noviembre = Instalador
+- Del 9 al 15 de Octubre = terminar login al 100% y script de busqueda automatica de equipos intentos de login.
+
 #### TO-DO LIST
 - [ ] Opcion para administrar equipos de fuera del dominio
+- [ ] Generar doc de timeline de los repositorios de github para la documentacion
 - [ ] Instalacion mysql
   - [ ] apt install mariadb-server
   - [ ] ejecutamos el comando "sudo mysql_secure_installation
