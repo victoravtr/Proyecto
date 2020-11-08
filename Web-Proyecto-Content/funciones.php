@@ -174,5 +174,3 @@ function comprobarCodigo($conexion, $codigo) {
     return false;
 
 }
-
-?>
