@@ -1,0 +1,28 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>example - Categoría - Documentación</title>
+        <link>http://example.org/categories/example/</link>
+        <description>example - Categoría - Documentación</description>
+        <generator>Hugo -- gohugo.io</generator><language>es</language><lastBuildDate>Mon, 02 Nov 2020 12:39:37 &#43;0100</lastBuildDate><atom:link href="http://example.org/categories/example/" rel="self" type="application/rss+xml" /><item>
+    <title>Documentacion</title>
+    <link>http://example.org/posts/documentacion/</link>
+    <pubDate>Mon, 02 Nov 2020 12:39:37 &#43;0100</pubDate>
+    <author>Autor</author>
+    <guid>http://example.org/posts/documentacion/</guid>
+    <description><![CDATA[Documentacion de la aplicacion]]></description>
+</item><item>
+    <title>First_post</title>
+    <link>http://example.org/posts/first_post/</link>
+    <pubDate>Mon, 02 Nov 2020 12:39:37 &#43;0100</pubDate>
+    <author>Autor</author>
+    <guid>http://example.org/posts/first_post/</guid>
+    <description><![CDATA[Primer post de ejemplo]]></description>
+</item><item>
+    <title>How-To</title>
+    <link>http://example.org/posts/guia_uso/</link>
+    <pubDate>Mon, 02 Nov 2020 12:39:37 &#43;0100</pubDate>
+    <author>Autor</author>
+    <guid>http://example.org/posts/guia_uso/</guid>
+    <description><![CDATA[Guia de uso de la aplicacion]]></description>
+</item></channel>
+</rss>

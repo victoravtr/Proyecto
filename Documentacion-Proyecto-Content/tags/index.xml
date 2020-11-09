@@ -1,0 +1,21 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Tags - Etiqueta - Documentación</title>
+        <link>http://example.org/tags/</link>
+        <description>Tags - Etiqueta - Documentación</description>
+        <generator>Hugo -- gohugo.io</generator><language>es</language><lastBuildDate>Mon, 02 Nov 2020 12:39:37 &#43;0100</lastBuildDate><atom:link href="http://example.org/tags/" rel="self" type="application/rss+xml" /><item>
+    <title>first-post</title>
+    <link>http://example.org/tags/first-post/</link>
+    <pubDate>Mon, 02 Nov 2020 12:39:37 &#43;0100</pubDate>
+    <author>Autor</author>
+    <guid>http://example.org/tags/first-post/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
+    <title>prueba</title>
+    <link>http://example.org/tags/prueba/</link>
+    <pubDate>Mon, 02 Nov 2020 12:39:37 &#43;0100</pubDate>
+    <author>Autor</author>
+    <guid>http://example.org/tags/prueba/</guid>
+    <description><![CDATA[]]></description>
+</item></channel>
+</rss>
