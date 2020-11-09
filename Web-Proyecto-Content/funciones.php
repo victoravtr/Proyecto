@@ -24,51 +24,6 @@ function conectarBase(){
     return $conexion;
 }
 
-//comprobar si AADAD existe
-function existeBD($conexion){
-    // cambiamos la base de datos actual a AADAD
-    mysqli_select_db($conexion, "aadad");
-
-    // comprobamos si la base de datos actual es AADAD
-    // si lo es la base de datos existe, si no no existe
-    $result = mysqli_query($conexion, "SELECT DATABASE()");
-    $row = mysqli_fetch_row($result);
-    if ($row[0] == "aadad") {
-        mysqli_free_result($result);
-        return true;
-    } 
-    return false;
-}
-
-// Crear base de datos y tablas
-function crearBaseDatos($conexion){
-    
-    $check = mysqli_query($conexion, "CREATE DATABASE aadad");
-    
-    // comprobamos que la sentencia se ha ejecutado correctamente y continuamos
-    if ($check) {
-        
-        $check = mysqli_select_db($conexion, "aadad");
-        if ($check) {
-            
-            $check = mysqli_query($conexion, "create table CREDENCIALES(
-                                                            usuario varchar(10) not null, 
-                                                            pass varchar(255) not null, 
-                                                            correo varchar(50) not null, 
-                                                            constraint credenciales_pk primary key (usuario))");
-            if ($check) {
-                mysqli_free_result($check);
-            } else {
-                echo "No se han creado las tablas";
-            }
-        } else {
-            echo "No se ha cambiado la base de datos: ".mysqli_error($conexion);
-        }
-    } else {
-        echo "No se ha creado la base de datos: ".mysqli_error($conexion);
-    }
-}
-
 // comprobar si un usuario existe
 function existeUsuario($conexion, $usuario, $correo) {
 
