@@ -98,21 +98,12 @@
 					$cadena_errores_bd = $cadena_errores_bd."\\n".mysqli_error($conexion);
 					echo '<script> alert("'.$cadena_errores_bd.'")</script>';
 				} else {
-					// comprobamos si la base de datos "AADAD" existe"
-					if (existeBD($conexion)) {
-						// Si existe comprobamos que no hay ningun usuario con ese nombre o correo
-						if (existeUsuario($conexion, $usuario, $correo)) {
-							$cadena_errores_bd = $cadena_errores_bd."\\n Ya existe un usuario con ese nombre o correo.";
-						} else {
-							registrarUsuario($conexion, $usuario, $correo, $contraseña);
-							echo "<h1>Se ha creado el usuario $usuario</h1>";
-						}
+					// comprobamos si el usuario
+					if (existeUsuario($conexion, $usuario, $correo)) {
+						$cadena_errores_bd = $cadena_errores_bd."\\n Ya existe un usuario con ese nombre o correo.";
 					} else {
-						// Si no existe la creamos y registramos al usuario
-						crearBaseDatos($conexion);
 						registrarUsuario($conexion, $usuario, $correo, $contraseña);
-						echo "<h1>Se ha creado el usuario $usuario y la base de datos</h1>";
-						
+						echo "<h1>Se ha creado el usuario $usuario</h1>";
 					}
 
 				}
