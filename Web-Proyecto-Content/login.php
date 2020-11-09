@@ -69,34 +69,24 @@ if (isset($_POST["login"])) {
 			$cadena_errores_bd = $cadena_errores_bd."\\n".mysqli_error($conexion);
 			echo '<script> alert("'.$cadena_errores_bd.'")</script>';
 		} else {
+			// Comprobamos que  el usuario existe
+			if (existeUsuario($conexion, $usuario, null)) {
+				// comprobamos que las credenciales son correctas
+				$check = comprobarCredenciales($conexion, $usuario, $contraseña);
+				if ($check) {
+					// las credenciales estan bien, redirigimos al usuario a index.php
+					session_start();
+					$_SESSION["usuario"] = $usuario;
 
-			// comprobamos si la base de datos "AADAD" existe"
-			if (existeBD($conexion)) {
-				// Si existe comprobamos que si el usuario existe
-				if (existeUsuario($conexion, $usuario, null)) {
-					// comprobamos que las credenciales son correctas
-					$check = comprobarCredenciales($conexion, $usuario, $contraseña);
-					if ($check) {
-						// las credenciales estan bien, redirigimos al usuario a index.php
-						session_start();
-						$_SESSION["usuario"] = $usuario;
-
-						header("Location:index.php");
-					}
-					$cadena_errores_bd = $cadena_errores_bd."\\n Las credenciales no son correctas.";
-					echo '<script> alert("'.$cadena_errores_bd.'")</script>';
-				} else {
-					// Si no existe mostramos un mensaje de error
-					$cadena_errores_bd = $cadena_errores_bd."\\n Ese usuario no existe.";
-					echo '<script> alert("'.$cadena_errores_bd.'")</script>';
-
+					header("Location:index.php");
 				}
-			} else {
-
-				// Si no existe mostramos un mensaje de error
-				$cadena_errores_bd = $cadena_errores_bd."\\n La base de datos no existe.";
-				$cadena_errores_bd = $cadena_errores_bd."\\n Debes crear un nuevo usuario, la base de datos se creará automáticamente.";
+				$cadena_errores_bd = $cadena_errores_bd."\\n Las credenciales no son correctas.";
 				echo '<script> alert("'.$cadena_errores_bd.'")</script>';
+			} else {
+				// Si no existe mostramos un mensaje de error
+				$cadena_errores_bd = $cadena_errores_bd."\\n Ese usuario no existe.";
+				echo '<script> alert("'.$cadena_errores_bd.'")</script>';
+
 			}
 
 		}
