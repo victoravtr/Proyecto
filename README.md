@@ -8,6 +8,8 @@
 
 #### TO-DO LIST
 - [ ] Opcion para administrar equipos de fuera del dominio
+- [ ] Meter sshpass en la instalacion
+- [ ] Meter en documentacion y script de instalacion que si el programa no funciona habria que descomentar la linea de extension=mysql en php.ini
 - [ ] Con hugo -D podemos crear una copia estatica de la documentacion por lo que no necesita el serve continuamente
   - [ ] Revisar como generarla bien, por algun motivo falla
   - [ ] Indicar en el instalador y en la documentacion que si se quiere hacer cualquier cambio como hacerlo
