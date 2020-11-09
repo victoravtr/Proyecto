@@ -8,6 +8,10 @@
 
 #### TO-DO LIST
 - [ ] Opcion para administrar equipos de fuera del dominio
+- [ ] Con hugo -D podemos crear una copia estatica de la documentacion por lo que no necesita el serve continuamente
+  - [ ] Revisar como generarla bien, por algun motivo falla
+  - [ ] Indicar en el instalador y en la documentacion que si se quiere hacer cualquier cambio como hacerlo
+  - [ ] Indicar en la documentacion y en el instalador una referencia a la documentacion de hugo
 - [ ] Generar doc de timeline de los repositorios de github para la documentacion
 - [ ] Instalacion mysql
   - [ ] apt install mariadb-server
