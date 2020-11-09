@@ -12,17 +12,17 @@ function conectarBase(){
     // puedes cambiar las siguientes variables en    //
     // el archivo de configuracion config.json       //
     ///////////////////////////////////////////////////
-    $config = file_get_contents("config.json");
-    $json = json_decode($config, true);
+    $config = file("/etc/proyecto/mysql/db_config.conf");//file in to an array
 
-    $host = trim($json['credenciales']['host']);
-    $user = trim($json['credenciales']['user']);
-    $pass = trim($json['credenciales']['pass']);
+    $host = explode('=', trim($config[1]))[1];
+    $user = explode('=', trim($config[2]))[1];
+    $pass = explode('=', trim($config[3]))[1];
+    $database = explode('=', trim($config[4]))[1];
 
-    $conexion = mysqli_connect($host, $user, $pass);
-
+    $conexion = mysqli_connect($host, $user, $pass, $database);
     return $conexion;
 }
+
 
 // comprobar si un usuario existe
 function existeUsuario($conexion, $usuario, $correo) {
