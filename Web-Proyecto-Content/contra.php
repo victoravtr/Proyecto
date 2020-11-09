@@ -88,35 +88,23 @@
 					echo '<script> alert("'.$cadena_errores_bd.'")</script>';
 				} else {
 		
-					// comprobamos si la base de datos "AADAD" existe"
-					if (existeBD($conexion)) {
+					// Comprobamos  si el correo existe
+          if (existeUsuario($conexion, null, $correo)) {
 
-						// Si existe comprobamos que si el correo existe
-						if (existeUsuario($conexion, null, $correo)) {
-
-							// Si existe comprobamos registramos la solicitud, comprobando si ya existe una
-              $check = registrarSolicitudResetPass($conexion, $correo);
-							if ($check) {
-                enviarCorreo($conexion, $correo);
-								echo "<h1>La solicitud se ha registrado correctamente.<br>Revisa tu correo electronico.</h1>";
-							} else {
-								echo "<h1>La solicitud no se ha registrado correctamente</h1>";
-							}
-
-
-						} else {
-							// Si no existe mostramos un mensaje de error
-							$cadena_errores_bd = $cadena_errores_bd."\\n Ese correo no existe.";
-							echo '<script> alert("'.$cadena_errores_bd.'")</script>';
-		
-						}
-					} else {
-		
-						// Si no existe mostramos un mensaje de error
-						$cadena_errores_bd = $cadena_errores_bd."\\n La base de datos no existe.";
-						$cadena_errores_bd = $cadena_errores_bd."\\n Debes crear un nuevo usuario, la base de datos se creará automáticamente.";
-						echo '<script> alert("'.$cadena_errores_bd.'")</script>';
-					}
+            // Si existe registramos la solicitud, comprobando si ya existe una
+            $check = registrarSolicitudResetPass($conexion, $correo);
+            if ($check) {
+              enviarCorreo($conexion, $correo);
+              echo "<h1>La solicitud se ha registrado correctamente.<br>Revisa tu correo electronico.</h1>";
+            } else {
+              echo "<h1>La solicitud no se ha registrado correctamente</h1>";
+            }
+          } else {
+            // Si no existe mostramos un mensaje de error
+            $cadena_errores_bd = $cadena_errores_bd."\\n Ese correo no existe.";
+            echo '<script> alert("'.$cadena_errores_bd.'")</script>';
+  
+          }
 		
 				}
 			} else {
@@ -167,32 +155,17 @@
                 $cadena_errores_bd = $cadena_errores_bd."\\n".mysqli_error($conexion);
                 echo '<script> alert("'.$cadena_errores_bd.'")</script>';
               } else {
-          
-                // comprobamos si la base de datos "AADAD" existe"
-                if (existeBD($conexion)) {
-                  
-                  // Comprobamos que el codigo existe
-                  if (comprobarCodigo($conexion, $codigo)) {
-
-                    // Si existe cambiamos la contraseña
-                    $check = cambiarPass($conexion, $pass, $codigo);
-                    if ($check) {
-                      echo "<h1>La contraseña ha sido cambiada</h1>";
-                    } else {
-                      $cadena_errores_bd = $cadena_errores_bd."\\n Ha habido un error al cambiar la contraseña.";
-                    }
-                    
+                // Comprobamos que el codigo existe
+                if (comprobarCodigo($conexion, $codigo)) {
+                  // Cambiamos la contraseña
+                  $check = cambiarPass($conexion, $pass, $codigo);
+                  if ($check) {
+                    echo "<h1>La contraseña ha sido cambiada</h1>";
                   } else {
-
-                    $cadena_errores_bd = $cadena_errores_bd."\\n El codigo de solicitud no es valido.";
+                    $cadena_errores_bd = $cadena_errores_bd."\\n Ha habido un error al cambiar la contraseña.";
                   }
-                  
                 } else {
-          
-                  // Si no existe mostramos un mensaje de error
-                  $cadena_errores_bd = $cadena_errores_bd."\\n La base de datos no existe.";
-                  $cadena_errores_bd = $cadena_errores_bd."\\n Debes crear un nuevo usuario, la base de datos se creará automáticamente.";
-                  echo '<script> alert("'.$cadena_errores_bd.'")</script>';
+                  $cadena_errores_bd = $cadena_errores_bd."\\n El codigo de solicitud no es valido.";
                 }
           
               }
