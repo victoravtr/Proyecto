@@ -278,8 +278,9 @@ if [[ "$decision" != "y" ]]; then
     echo -e "${BLANK_SPACE}｜＿＿＿＿＿＿＿＿＿＿＿｜"
     echo -e "${BLANK_SPACE} (\__/) ||"
     echo -e "${BLANK_SPACE} (•ㅅ•) ||"
-    echo -e "${BLANK_SPACE} / 　 づ$Color_Off"
+    echo -e "${BLANK_SPACE} / 　 づ"
     echo ""
+    echo -e "${BLANK_SPACE} http://proyecto.local$Color_Off"
     exit 1
 fi
 
@@ -311,7 +312,7 @@ if [ -z "$(ls -A /var/www/doc-proyecto)" ]; then
   # Copiamos el contenido de Web-Proyecto-Content/ en /var/www/proyecto
   echo -e "$Red [-] Error: la carpeta /var/www/doc-proyecto esta vacia. $Color_Off"
   echo  -e "$Yellow  [+] Copiando contenido en /var/www/doc-proyecto $Color_Off"
-  cp Documentacion-Proyecto-Content/* /var/www/doc-proyecto/
+  cp -r Documentacion-Proyecto-Content/ /var/www/doc-proyecto/
 fi
 
 
@@ -321,12 +322,12 @@ echo -e "${Blue}\nComprobando archivos de configuracion de apache2: $Color_Off"
 if ! [ -a "/etc/apache2/sites-available/documentacion.conf" ]; then
   echo -e "$Red [-] Error: no existe el archivo proyecto.conf en /etc/apache2/sites-available. $Color_Off "
   echo  -e "$Yellow  [+] Copiando archivo $Color_Off"
-  cp files/apache/proyecto.conf /etc/apache2/sites-available/proyecto.conf
+  cp files/apache/documentacion.conf /etc/apache2/sites-available/documentacion.conf
   # Activamos el sitio
   # Al usar a2ensite desde fuera de sites-available falla, hacemos cd a la carpeta y volvemos
   echo  -e "$Yellow  [+] Activando sitio $Color_Off"
   cd /etc/apache2/sites-available/
-  a2ensite proyecto.conf
+  a2ensite documentacion.conf
   systemctl reload apache2
   cd $INSTALL_DIR
 fi
@@ -341,6 +342,8 @@ if ! [ -x "$(command -v hugo)" ]; then
 fi
 
 echo -e "$Green [+] Hugo instalado $Color_Off"
+echo  -e "$Yellow  [+] La instalacion de Hugo es necesaria solo si quieres realizar algun cambio en la documentacion $Color_Off"
+echo  -e "$Yellow  [+] Dirigete a http://documentacion.local/hugo para ver como $Color_Off"
 
 BLANK_SPACE="  "
 echo ""
@@ -354,4 +357,7 @@ echo -e "${BLANK_SPACE}｜ ｐｒｏｇｒａｍａ！　 ｜"
 echo -e "${BLANK_SPACE}｜＿＿＿＿＿＿＿＿＿＿＿｜"
 echo -e "${BLANK_SPACE} (\__/) ||"
 echo -e "${BLANK_SPACE} (•ㅅ•) ||"
-echo -e "${BLANK_SPACE} / 　 づ$Color_Off"
+echo -e "${BLANK_SPACE} / 　 づ"
+echo ""
+echo -e "${BLANK_SPACE} http://documentacion.local"
+echo -e "${BLANK_SPACE} http://proyecto.local$Color_Off"
