@@ -7,6 +7,7 @@
 # - hugo
 # - mysql
 # - php
+# - php-mysqli
 
 #COLORS
 # Reset
@@ -87,6 +88,7 @@ if ! [ -x "$(command -v php)" ]; then
     # Instalamos apache2
     echo "$Yellow  [+] Instalando php $Color_Off"
     apt install php
+    apt install php-mysqli
   fi
 fi
 
