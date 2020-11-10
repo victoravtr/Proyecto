@@ -6,9 +6,6 @@
 <body>
 
 <form action="test.php" method="post">
-  <input type="text" name="comando" id="comando">
-  <label for="comando">Comando</label>
-  <br>
   <input type="text" name="usuario" id="usuario">
   <label for="comando">Usuario</label>
   <br>
@@ -23,27 +20,44 @@
 
 <?php
 
+
 if (isset($_POST['enviar'])) {
-  set_include_path(get_include_path() . PATH_SEPARATOR . 'phpseclib');
-  include('Net/SSH2.php');
-  
-  $comando = $_POST['comando'];
-  $usuario = $_POST['usuario'];
-  $password = $_POST['password'];
-  $ip = $_POST['ip'];
-  echo "<p>Comando: $comando</p>";
-  echo "<p>Usuario: $usuario</p>";
-  echo "<p>Password: $password </p>";
-  echo "<p>IP: $ip</p>";
+  $cadena_errores = "Error al procesar los datos del formulario:";
+  $error = false;
 
-  echo "<p>Probando conexion</p>";
+  $IP=trim($_POST['ip']);
+  $USER=trim($_POST['usuario']);
+  $PASS=trim($_POST['password']);
   
-$ssh = new Net_SSH2($ip);
-if (!$ssh->login($usuario, $password)) {
-    exit('Login Failed');
-}
+  if (empty($USER)) {
+		$error=true;
+		$cadena_errores = $cadena_errores."\\n No has introducido un usuario";
+  }
 
-echo $ssh->exec($comando);
+  if (empty($PASS)) {
+		$error=true;
+		$cadena_errores = $cadena_errores."\\n No has introducido una pass";
+  }
+
+  if (empty($IP)) {
+		$error=true;
+		$cadena_errores = $cadena_errores."\\n No has introducido una IP";
+  }
+  
+  if ($error) {
+    echo '<script> alert("'.$cadena_errores_bd.'")</script>';
+  } else {
+    echo "<pre>Comprobando conexion por ssh: </pre>";
+    $output = shell_exec("bash assets/scripts/connect_ssh.sh $IP $USER $PASS");
+    if ($output==0) {
+      echo "<pre>La conexion por ssh ha sido exitosa.</pre>";
+      $output = shell_exec("bash assets/scripts/exec_ssh.sh $IP $USER $PASS hostname");
+      echo $output;
+  } else {
+      echo "<pre>No se ha podido conectar por ssh.</pre>";
+  }
+  }
+  
 
 }
 
