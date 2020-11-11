@@ -24,39 +24,49 @@
 if (isset($_POST['enviar'])) {
   $cadena_errores = "Error al procesar los datos del formulario:";
   $error = false;
-
-  $IP=trim($_POST['ip']);
-  $USER=trim($_POST['usuario']);
-  $PASS=trim($_POST['password']);
+  $output = shell_exec("bash assets/scripts/check_connection.sh");
+  $split = explode("\n", $output);
   
-  if (empty($USER)) {
-		$error=true;
-		$cadena_errores = $cadena_errores."\\n No has introducido un usuario";
-  }
+  $user = trim(shell_exec("whoami"));
+  $hostname = trim(shell_exec("hostname"));
+  $path = trim(shell_exec("pwd"));
 
-  if (empty($PASS)) {
-		$error=true;
-		$cadena_errores = $cadena_errores."\\n No has introducido una pass";
+  foreach ($split as &$linea) {
+    echo "<p>${user}@${hostname}:${path}# ${linea}</p>";
   }
-
-  if (empty($IP)) {
-		$error=true;
-		$cadena_errores = $cadena_errores."\\n No has introducido una IP";
-  }
+  // $IP=trim($_POST['ip']);
+  // $USER=trim($_POST['usuario']);
+  // $PASS=trim($_POST['password']);
+  // $COMMAND="whoami";
   
-  if ($error) {
-    echo '<script> alert("'.$cadena_errores_bd.'")</script>';
-  } else {
-    echo "<pre>Comprobando conexion por ssh: </pre>";
-    $output = shell_exec("bash assets/scripts/connect_ssh.sh $IP $USER $PASS");
-    if ($output==0) {
-      echo "<pre>La conexion por ssh ha sido exitosa.</pre>";
-      $output = shell_exec("bash assets/scripts/exec_ssh.sh $IP $USER $PASS hostname");
-      echo $output;
-  } else {
-      echo "<pre>No se ha podido conectar por ssh.</pre>";
-  }
-  }
+  // if (empty($USER)) {
+	// 	$error=true;
+	// 	$cadena_errores = $cadena_errores."\\n No has introducido un usuario";
+  // }
+
+  // if (empty($PASS)) {
+	// 	$error=true;
+	// 	$cadena_errores = $cadena_errores."\\n No has introducido una pass";
+  // }
+
+  // if (empty($IP)) {
+	// 	$error=true;
+	// 	$cadena_errores = $cadena_errores."\\n No has introducido una IP";
+  // }
+  
+  // if ($error) {
+  //   echo '<script> alert("'.$cadena_errores_bd.'")</script>';
+  // } else {
+  //   echo "<pre>Comprobando conexion por ssh: </pre>";
+  //   $output = shell_exec("bash assets/scripts/connect_ssh.sh $IP $USER $PASS");
+  //   if ($output==0) {
+  //     echo "<pre>La conexion por ssh ha sido exitosa.</pre>";
+  //     $output = shell_exec("bash assets/scripts/exec_ssh.sh $IP $USER '$PASS' $COMMAND");
+  //     echo $output;
+  //   } else {
+  //     echo "<pre>No se ha podido conectar por ssh.</pre>";
+  //   }
+  // }
   
 
 }
