@@ -127,5 +127,10 @@ function comprobarCodigo($conexion, $codigo) {
         return true;
     }
     return false;
+}
+
+function comprobarConexion() {
 
 }
+
+?>
