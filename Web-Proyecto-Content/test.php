@@ -24,16 +24,44 @@
 if (isset($_POST['enviar'])) {
   $cadena_errores = "Error al procesar los datos del formulario:";
   $error = false;
-  $output = shell_exec("bash assets/scripts/check_connection.sh");
-  $split = explode("\n", $output);
+
+  $IP=trim($_POST['ip']);
+  $USER=trim($_POST['usuario']);
+  $PASS=trim($_POST['password']);
+  echo "$IP $USER $PASS";
+
+  $FILE_PATH= array (
+    "ssh" => "connect_ssh.sh",
+    "psexec" => "connect_psexec.sh",
+    "sc" => "connect_sc.sh",
+    "winrm" => "connect_winrm.sh",
+    "msbuild" => "connect_msbuild.sh",
+    "dcom" => "connect_dcom.sh",
+    "schtask" => "connect_schtask.sh",
+    "wmi" => "connect_wmi.sh"
+  );
+  
   
   $user = trim(shell_exec("whoami"));
   $hostname = trim(shell_exec("hostname"));
   $path = trim(shell_exec("pwd"));
 
-  foreach ($split as &$linea) {
+  foreach($FILE_PATH as $key=>$value) {
+    echo "<p>Probando conexion ".$key."</p>";
+    echo "<p>Ejecutando ".$value."</p>";
+    $output = shell_exec("./assets/scripts/$value $IP $USER '$PASS'");
+    if ($output) {
+      echo "<p>Se ha establecido una conexion.</p>";
+    } else {
+      echo "<p>No ha sido posible establecer una conexion.</p>";
+    }
     echo "<p>${user}@${hostname}:${path}# ${linea}</p>";
-  }
+    
+}
+  
+
+
+
   // $IP=trim($_POST['ip']);
   // $USER=trim($_POST['usuario']);
   // $PASS=trim($_POST['password']);
