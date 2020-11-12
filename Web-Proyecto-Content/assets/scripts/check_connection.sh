@@ -29,4 +29,12 @@ do
     path_conexion=$(echo $i | cut -d ":" -f 2)
     echo -e "Probando conexion $tipo_conexion"
     echo -e "Ejecutando $path_conexion"
+    echo -e "Tratando de conectar con $path_conexion $IP $USER $PASS"
+    response=$(./$path_conexion $IP $USER $PASS)
+    echo "Response: $response"
+    if [ $response -eq 0 ]; then
+        echo -e "Conexion realizada con exito."
+    else
+        echo -e "No se ha podido completar la conexion."
+    fi    
 done
