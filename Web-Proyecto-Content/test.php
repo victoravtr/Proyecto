@@ -32,20 +32,15 @@ if (isset($_POST['enviar'])) {
 
   $FILE_PATH= array (
     "ssh" => "connect_ssh.sh",
-    "psexec" => "connect_psexec.sh",
-    "sc" => "connect_sc.sh",
     "winrm" => "connect_winrm.sh",
-    "msbuild" => "connect_msbuild.sh",
-    "dcom" => "connect_dcom.sh",
-    "schtask" => "connect_schtask.sh",
-    "wmi" => "connect_wmi.sh"
+    "PSRemoting" => "connect_psremoting.sh"
   );
   
   
   $user = trim(shell_exec("whoami"));
   $hostname = trim(shell_exec("hostname"));
   $path = trim(shell_exec("pwd"));
-
+  $COMMAND = "ipconfig";
   foreach($FILE_PATH as $key=>$value) {
     echo "<p>Probando conexion ".$key."</p>";
     echo "<p>Ejecutando ".$value."</p>";
@@ -55,7 +50,7 @@ if (isset($_POST['enviar'])) {
     } else {
       echo "<p>No ha sido posible establecer una conexion.</p>";
     }
-    echo "<p>${user}@${hostname}:${path}# ${linea}</p>";
+    
     
 }
   
