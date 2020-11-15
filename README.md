@@ -7,6 +7,22 @@
 - Del 9 al 15 de Octubre = terminar login al 100% y script de busqueda automatica de equipos intentos de login.
 
 #### TO-DO LIST
+- [ ] En los scripts de conexion devolver "codigo_error;motivo_de_error" en vez de solo el codigo
+- [ ] Al final no tiramos de psexec, la version para linux da problemas al instalarla y es muy antigua
+- [ ] Meter winrm en el instalador
+  - [ ] Necesita python y pip de primeras
+- [ ] Pasos para meter equipo en dominio:
+  - [ ] Buscar si en el dominio hay una entrada en los DNS (?)
+  - [ ] Cambiar DNS equipo por los del dominio, IP tambien si fuese necesario
+  - [ ] Incluir equipo en dominio
+  - [ ] Reiniciar
+  - [ ] Comprobar que se ha metido bien al dominio iniciando sesion en el propio equipo y luego por ssh
+  - [ ] Mostrar mensaje indicativo de que se ha realizado la union pero y que pueden iniciar sesion ya en el equipo
+  - [ ] Preparar plantilla de cambios que se pueden hacer de primeras por GPO, rollo mantener el ssh y cosas asi
+- [ ] En documentacion meter apartado con descripcion de ssh, winrm, etc, etc con pros y contras
+- [ ] Ya que vamos a hacer cositas con ssh, mirar si se pueden meter en los equipos fail2ban
+- [ ] Desplegar .exe e instalarlos en otros equipos de forma automatica
+- [ ] Instalar agente zabbix, sin proxy de primeras, y alienvault y configurarlo
 - [ ] Opcion para administrar equipos de fuera del dominio
 - [ ] Meter sshpass en la instalacion
 - [ ] Meter en documentacion y script de instalacion que si el programa no funciona habria que descomentar la linea de extension=mysql en php.ini
