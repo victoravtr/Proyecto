@@ -11,7 +11,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Index</title>
-    <link rel="stylesheet" href="style_index.css">
+    <link rel="stylesheet" href="assets/styles/style_index.css">
 </head>
 <body>
 
@@ -23,19 +23,23 @@
     <div class="card">
         <div class="contenido">
             <form action="index.php" method="post">
-                <input type="submit" class="boton" name="login" value="Añadir equipos a dominio"/>
+                <input type="submit" class="boton" name="dominio" value="Añadir equipos a dominio"/>
             </form>
 
             <form action="index.php" method="post">
-                <input type="submit" class="boton" name="login" value="Instalacion software en equipos"/>
+                <input type="submit" class="boton" name="add_soft" value="Instalacion software en equipos"/>
             </form>
             
             <form action="index.php" method="post">
-                <input type="submit" class="boton" name="login" value="Añadir agente zabbix en equipo"/>
+                <input type="submit" class="boton" name="zabbix" value="Añadir agente zabbix en equipo"/>
             </form>
             
             <form action="index.php" method="post">
-                <input type="submit" class="boton" name="login" value="Añadir agente ossec en equipo"/>
+                <input type="submit" class="boton" name="ossec" value="Añadir agente ossec en equipo"/>
+            </form>
+
+            <form action="index.php" method="post">
+                <input type="submit" class="boton" name="shell" value="Abrir shell en equipo."/>
             </form>
 
         </div>
@@ -44,23 +48,28 @@
 </div>
 
 <?php
-    if (isset($_POST["login"])) {
+    if (isset($_POST["dominio"])) {
         header("Location:dominio.php");
     }
     
     // TODO: Crear add_soft.php y que haga sus cositas
     if (isset($_POST["login"])) {
-        header("Location:zabbix.php");
+        header("Location:add_soft.php");
     }
 
     // TODO: Crear zabbix.php y que haga sus cositas
-    if (isset($_POST["login"])) {
+    if (isset($_POST["zabbix"])) {
         header("Location:zabbix.php");
     }
 
     // TODO: Crear ossec.php y que haga sus cositas
-    if (isset($_POST["login"])) {
+    if (isset($_POST["ossec"])) {
         header("Location:ossec.php");
+    }
+
+        // TODO: Crear shell.php y que haga sus cositas
+    if (isset($_POST["shell"])) {
+        header("Location:shell.php");
     }
 ?>
 </body>
