@@ -12,7 +12,7 @@ if (empty($usuario)) {
 <head>
     <meta charset="UTF-8">
     <title>Index</title>
-    <link rel="stylesheet" href="style_core.css">
+    <link rel="stylesheet" href="assets/styles/style_core.css">
 </head>
 
 <body>
