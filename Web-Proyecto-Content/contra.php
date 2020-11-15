@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>¿Has olvidado tu contraseña?</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="assets/styles/style.css">
 
 </head>
 <body>
