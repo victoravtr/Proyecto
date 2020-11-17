@@ -7,6 +7,7 @@
 - Del 9 al 15 de Octubre = terminar login al 100% y script de busqueda automatica de equipos intentos de login.
 
 #### TO-DO LIST
+- [ ] Cronjob para borrar cada X horas el contenido de /uploads
 - [ ] Meter nmap en instalador
 - [ ] Cambiar todas las rutas relativas a rutas absolutas
 - [ ] Para comprobar si PSRemoting esta habilitado tenemos que conectarnos por ssh, descargarnos un script y ejecutarlo
