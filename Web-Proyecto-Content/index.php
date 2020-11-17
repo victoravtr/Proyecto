@@ -15,6 +15,7 @@
 </head>
 <body>
 
+<a class="config" href="config.php">Configuracion </a>
 <a class="cerrar" href="logout.php">Cerrar sesión</a>
 
 <div class="elementos">
@@ -39,7 +40,7 @@
             </form>
 
             <form action="index.php" method="post">
-                <input type="submit" class="boton" name="shell" value="Abrir shell en equipo."/>
+                <input type="submit" class="boton" name="shell" value="Abrir shell en equipo"/>
             </form>
 
         </div>
@@ -53,7 +54,7 @@
     }
     
     // TODO: Crear add_soft.php y que haga sus cositas
-    if (isset($_POST["login"])) {
+    if (isset($_POST["add_soft"])) {
         header("Location:add_soft.php");
     }
 
