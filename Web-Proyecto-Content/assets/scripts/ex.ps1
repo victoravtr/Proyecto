@@ -1,3 +1,0 @@
-Write-Host (Get-Date)
-
-
