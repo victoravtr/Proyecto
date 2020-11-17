@@ -7,6 +7,9 @@
 - Del 9 al 15 de Octubre = terminar login al 100% y script de busqueda automatica de equipos intentos de login.
 
 #### TO-DO LIST
+- [ ] Meter nmap en instalador
+- [ ] Cambiar todas las rutas relativas a rutas absolutas
+- [ ] Para comprobar si PSRemoting esta habilitado tenemos que conectarnos por ssh, descargarnos un script y ejecutarlo
 - [ ] En los scripts de conexion devolver "codigo_error;motivo_de_error" en vez de solo el codigo
 - [ ] Al final no tiramos de psexec, la version para linux da problemas al instalarla y es muy antigua
 - [ ] Meter winrm en el instalador
