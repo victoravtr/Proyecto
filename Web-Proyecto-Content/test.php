@@ -33,7 +33,7 @@ if (isset($_POST['enviar'])) {
   $FILE_PATH= array (
     "ssh" => "connect_ssh.sh",
     "winrm" => "connect_winrm.sh",
-    "PSRemoting" => "connect_psremoting.sh"
+    "PSRemoting" => "connect_psremote.sh"
   );
   
   
@@ -41,19 +41,35 @@ if (isset($_POST['enviar'])) {
   $hostname = trim(shell_exec("hostname"));
   $path = trim(shell_exec("pwd"));
   $COMMAND = "ipconfig";
+  $STRING = "";
+  $CONF_FILE = "/etc/proyecto/general/";
+  $PREF_METHOD = "";
+
   foreach($FILE_PATH as $key=>$value) {
     echo "<p>Probando conexion ".$key."</p>";
     echo "<p>Ejecutando ".$value."</p>";
     $output = shell_exec("./assets/scripts/$value $IP $USER '$PASS'");
     if ($output) {
       echo "<p>Se ha establecido una conexion.</p>";
+      $STRING .= "${key}:true\n";
+      if ($key == "ssh") {
+        $PREF_METHOD = "ssh";
+      }
+      if ($key == "winrm" && $PREF_METHOD != "ssh") {
+        $PREF_METHOD = "winrm";
+      }
     } else {
       echo "<p>No ha sido posible establecer una conexion.</p>";
+      $STRING .= "${key}:false\n";
     }
-    
-    
-}
-  
+  }
+  if ($PREF_METHOD == "") {
+    $STRING .= "pref_method:false";
+  } else {
+    $STRING .= "pref_method:${PREF_METHOD}\n";
+  }
+  $CONF_FILE .= $IP;
+  file_put_contents($CONF_FILE, $STRING);
 
 
 
