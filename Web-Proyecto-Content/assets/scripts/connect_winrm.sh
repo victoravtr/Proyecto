@@ -22,7 +22,8 @@ if ! [ $? -eq 0 ]; then
 fi
 
 # Ejecutamos el .py de comprobacion
-res=$(python3 connect_winrm.py $IP $USER $PASS)
+pwd
+res=$(python3 /home/victor/Documentos/GitHub/Proyecto/Web-Proyecto-Content/assets/scripts/connect_winrm.py $IP $USER $PASS)
 echo $res
 if [ $res -eq 0 ]; then
     echo true
