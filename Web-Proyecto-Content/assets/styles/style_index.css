@@ -9,9 +9,20 @@ body {
 
 .cerrar {
     color: #11998e;
-    text-align: end;
-    width: 100%;
-    display: block;
+    text-align: center;
+    width: 125px;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.config {
+    color: #11998e;
+    /* text-align: center; */
+    width: 125px;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .elementos {
