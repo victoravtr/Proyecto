@@ -4,9 +4,16 @@
 #### LO-QUE-VOY-HACIENDO LIST
 - Agosto +/- = version 1.0 del login
 - Del 26 Octubre al 8 de Noviembre = Instalador
-- Del 9 al 15 de Octubre = terminar login al 100% y script de busqueda automatica de equipos intentos de login.
+- Del 9 al 15 de Noviembre = terminar login al 100% y script de para testear conexion.
+- Del 16 al 20 de Noviembre = apartado para despliegue de software
+- Del 20 al 22 de Noviembre = apartado para union equipos a dominio
 
 #### TO-DO LIST
+- [ ] Hacer que en add_soft salga el output de los comandos
+- [ ] Hacer listado de silent switches para los programas, instalando exiftool podemos encontrar buena info de los exes para luego poder categorizarlos, como el nombre original del archivo por ejemplo
+- [ ] Editar php.ini para meter mas upload_max_filesize y post_max_size
+- [ ] Meter en add_soft lista de programas tipicos para instalar y hacer scripts personalizados
+  - [ ] Meter tambien aviso de que algunos programas no funcionan. Chrome por ejemplo falla porque el instalador primero descargar el programa y despues lo instala el mismo
 - [ ] Cronjob para borrar cada X horas el contenido de /uploads
 - [ ] Meter nmap en instalador
 - [ ] Cambiar todas las rutas relativas a rutas absolutas
