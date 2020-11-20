@@ -97,7 +97,6 @@ if (empty($usuario)) {
             $BASE_DIR = "/var/www/html/uploads/";
             $FILE_UPLOAD = $BASE_DIR.$file["name"];
             if (move_uploaded_file($file["tmp_name"] , $FILE_UPLOAD)) {
-                echo '<script> alert("El archivo se ha subido al servidor.")</script>';
                 array_push($output, "Archivo cargado en servidor...");
               } else {
                 $cadena_errores = $cadena_errores."\\n Ha ocurrido un error al intentar subir el archivo.";
@@ -106,7 +105,7 @@ if (empty($usuario)) {
             # Ejecutamos el script que lo descarga en la IP objetivo y lo instala
             array_push($output, "Ejecutando script de instalacion...");
             $file_name = $file['name'];
-            $res = shell_exec("./assets/scripts/add_soft.sh $IP $USER '$PASS' $file_name");
+            $res = shell_exec("./assets/scripts/add_soft.sh $ip $usuario '$contraseña' $file_name");
             # Borramos el archivo del servidor
             
         } else {
