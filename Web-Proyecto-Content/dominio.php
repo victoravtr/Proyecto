@@ -12,47 +12,58 @@ if (empty($usuario)) {
 <head>
     <meta charset="UTF-8">
     <title>Index</title>
-    <link rel="stylesheet" href="assets/styles/style_core.css">
+    <link rel="stylesheet" href="assets/styles/style_domain.css">
 </head>
 
 <body>
 
+    <a class="config" href="index.php">Volver </a>
     <a class="cerrar" href="logout.php">Cerrar sesión</a>
 
     <div class="elementos">
-        <h1>Iniciar sesión como administrador</h1>
+        <h1>Añadir equipo a dominio</h1>
 
         <div class="card">
             <div class="contenido">
-                <form action="index.php" method="post">
-
-                    <div class="form__group field">
-                        <input type="text" class="form__field" placeholder="Usuario" name="usuario" id="user" value="<?php if (isset($_POST["usuario"]) != "") {
-                                                                                                                            echo $_POST["usuario"];
-                                                                                                                        } ?>">
-                        <label for="user" class="form__label">Usuario</label>
+                <form action="add_soft.php" enctype="multipart/form-data" method="post">
+                    <div class="upper-col">
+                        <div class="left-col">
+                            <h2>Datos cliente</h2>
+                            <input type="text" name="cli_ip" placeholder="IP">
+                            <input type="text" name="cli_usuario" placeholder="Usuario">
+                            <input type="password" name="cli_password" placeholder="Password">
+                        </div>
+                        <div class="center-col">
+                            <h2>Datos dominio</h2>
+                            <input type="text" name="dom_ip" placeholder="IP">
+                            <input type="text" name="dom_usuario" placeholder="Dominio\Usuario">
+                            <input type="password" name="dom_password" placeholder="Password">
+                        </div>
+                        <div class="right-col">
+                            <h2>Output: </h2>
+                        </div>
                     </div>
-
-                    <div class="form__group field">
-                        <input type="password" class="form__field" placeholder="Contraseña" name="pass" id="pass" />
-                        <label for="pass" class="form__label">Contraseña</label>
+                    <div class="bottom-col">
+                        <input type="submit" class="boton" name="domain" value="Añadir" />
                     </div>
-
-
-
-                    <input type="submit" class="boton" name="login" value="Iniciar sesión" />
                 </form>
             </div>
-
         </div>
     </div>
 
-    <?php
-    if (isset($_POST["login"])) {
-        header("Location:dominio.php");
+<?php
+    if (isset($_POST['domain'])) {
+        
+        $cli_ip = trim($_POST['cli_ip']);
+        $cli_user = trim($_POST['cli_user']);
+        $cli_password = trim($_POST['cli_password']);
+
+        $dom_ip = trim($_POST['dom_ip']);
+        $dom_user = trim($_POST['dom_user']);
+        $dom_password = trim($_POST['dom_password']);
     }
 
-    ?>
+?>
 </body>
 
 </html>
