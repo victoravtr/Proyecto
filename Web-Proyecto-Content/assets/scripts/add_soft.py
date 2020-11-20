@@ -1,23 +1,25 @@
 import winrm
 import sys
 import os
+import socket
 
 try:
-    IP = sys.argv[1]
+    IP_SERVER = socket.gethostbyname(socket.gethostname())
+    IP_CLIENT = sys.argv[1]
     USER = sys.argv[2]
     PASS = sys.argv[3]
     FILE = sys.argv[4]
-    URL_DESCARGA_SERVER = "http://" + IP + "/uploads/" + FILE
-    URL_DESCARGA_CLIENT = "C:\Users" + USER + "\\" + FILE
+    URL_DESCARGA_SERVER = "http://" + IP_SERVER + "/uploads/" + FILE
+    URL_DESCARGA_CLIENT = "C:\\Users\\" + USER + "\\" + FILE
 
-    s = winrm.Session(IP, auth=(USER, PASS))
-
+    session = winrm.Session(IP_CLIENTE, auth=(USER, PASS))
     # Descargamos el archivo en el equipo objetivo
-    COMMAND = "curl -o " + URL_DESCARGA_CLIENT + " " + URL_DESCARGA_SERVER
+    COMMAND = "curl -o " + URL_DESCARGA_CLIENT + " " + URL_DESCARGA_SERVER    
     session.run_ps(COMMAND)
 
     # Ejecutamos el archivo
-    COMMAND = "Start-Process -Wait -FilePath " + URL_DESCARGA_CLIENT + " -ArgumentList /S -PassThru"
+    # Start-Process -FilePath C:\Users\victorav\chrome.exe -ArgumentList "/silent","/install" -PassThru -Verb runas;
+    COMMAND = "Start-Process -FilePath " + URL_DESCARGA_CLIENT + " -ArgumentList \"/silent\",\"/install\" -PassThru -Verb runas"
     session.run_ps(COMMAND)
 
     # Una vez instalado borramos el archivo
@@ -26,7 +28,7 @@ try:
 
     # Por ultimo lo borramos en el servidor
     os.remove(URL_DESCARGA_SERVER)
-    
+
     # Si todo sale bien el programa retorna un 0
     print("0")
 except Exception as e:
