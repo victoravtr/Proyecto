@@ -88,9 +88,11 @@ if (empty($usuario)) {
                 $error = true;
                 $cadena_errores = $cadena_errores."\\n Formato de archivo no permitido.";
                 echo pathinfo($file["name"])['extension'];
+            } else {
+                array_push($output, "Archivo comprobado...");
             }
         }
-        array_push($output, "Archivo comprobado...");
+        
 
         if (!$error) {
             # Subimos el archivo al servidor
