@@ -53,7 +53,8 @@ if (empty($usuario)) {
 
 <?php
     if (isset($_POST['domain'])) {
-        
+        $error = false;
+
         $cli_ip = trim($_POST['cli_ip']);
         $cli_user = trim($_POST['cli_user']);
         $cli_password = trim($_POST['cli_password']);
@@ -61,6 +62,40 @@ if (empty($usuario)) {
         $dom_ip = trim($_POST['dom_ip']);
         $dom_user = trim($_POST['dom_user']);
         $dom_password = trim($_POST['dom_password']);
+
+        # Comprobamos las variables
+        if (empty($cli_ip)) {
+            $error = true;
+            $cadena_errores = $cadena_errores."\\n No has introducido la IP del cliente";
+        }
+        if (empty($cli_user)) {
+            $error = true;
+            $cadena_errores = $cadena_errores."\\n No has introducido el usuario del cliente";
+        }
+        if (empty($cli_password)) {
+            $error = true;
+            $cadena_errores = $cadena_errores."\\n No has introducido la password del cliente";
+        }
+
+        if (empty($dom_ip)) {
+            $error = true;
+            $cadena_errores = $cadena_errores."\\n No has introducido la IP del dominio";
+        }
+        if (empty($dom_user)) {
+            $error = true;
+            $cadena_errores = $cadena_errores."\\n No has introducido el usuario del dominio";
+        }
+        if (empty($dom_password)) {
+            $error = true;
+            $cadena_errores = $cadena_errores."\\n No has introducido la password del dominio";
+        }
+
+        if (!$error) {
+            # Ejecutamos el script para incluir en el dominio
+            $res = shell_exec("./assets/scripts/dominio.sh $cli_ip $cli_usuario '$cli_password' $dom_ip $dom_usuario '$dom_password'");
+        } else {
+            echo '<script> alert("'.$cadena_errores_bd.'")</script>';
+        }
     }
 
 ?>
