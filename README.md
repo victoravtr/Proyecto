@@ -9,6 +9,7 @@
 - Del 20 al 22 de Noviembre = apartado para union equipos a dominio
 
 #### TO-DO LIST
+- [ ] Requisito server: minimo la edicion 2010 para poder instalar OpenSSH
 - [ ] Hacer que en add_soft salga el output de los comandos
 - [ ] Hacer listado de silent switches para los programas, instalando exiftool podemos encontrar buena info de los exes para luego poder categorizarlos, como el nombre original del archivo por ejemplo
 - [ ] Editar php.ini para meter mas upload_max_filesize y post_max_size
