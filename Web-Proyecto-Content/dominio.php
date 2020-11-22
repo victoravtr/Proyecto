@@ -25,7 +25,7 @@ if (empty($usuario)) {
 
         <div class="card">
             <div class="contenido">
-                <form action="add_soft.php" enctype="multipart/form-data" method="post">
+                <form action="dominio.php" method="post">
                     <div class="upper-col">
                         <div class="left-col">
                             <h2>Datos cliente</h2>
@@ -38,6 +38,7 @@ if (empty($usuario)) {
                             <input type="text" name="dom_ip" placeholder="IP">
                             <input type="text" name="dom_usuario" placeholder="Dominio\Usuario">
                             <input type="password" name="dom_password" placeholder="Password">
+                            <input type="text" name="dom_name" placeholder="Nombre de dominio">
                         </div>
                         <div class="right-col">
                             <h2>Output: </h2>
@@ -51,7 +52,7 @@ if (empty($usuario)) {
         </div>
     </div>
 
-<?php
+    <?php
     if (isset($_POST['domain'])) {
         $error = false;
 
@@ -62,43 +63,48 @@ if (empty($usuario)) {
         $dom_ip = trim($_POST['dom_ip']);
         $dom_user = trim($_POST['dom_user']);
         $dom_password = trim($_POST['dom_password']);
+        $dom_name = trim($_POST['dom_name']);
 
         # Comprobamos las variables
         if (empty($cli_ip)) {
             $error = true;
-            $cadena_errores = $cadena_errores."\\n No has introducido la IP del cliente";
+            $cadena_errores = $cadena_errores . "\\n No has introducido la IP del cliente";
         }
         if (empty($cli_user)) {
             $error = true;
-            $cadena_errores = $cadena_errores."\\n No has introducido el usuario del cliente";
+            $cadena_errores = $cadena_errores . "\\n No has introducido el usuario del cliente";
         }
         if (empty($cli_password)) {
             $error = true;
-            $cadena_errores = $cadena_errores."\\n No has introducido la password del cliente";
+            $cadena_errores = $cadena_errores . "\\n No has introducido la password del cliente";
         }
 
         if (empty($dom_ip)) {
             $error = true;
-            $cadena_errores = $cadena_errores."\\n No has introducido la IP del dominio";
+            $cadena_errores = $cadena_errores . "\\n No has introducido la IP del dominio";
         }
         if (empty($dom_user)) {
             $error = true;
-            $cadena_errores = $cadena_errores."\\n No has introducido el usuario del dominio";
+            $cadena_errores = $cadena_errores . "\\n No has introducido el usuario del dominio";
         }
         if (empty($dom_password)) {
             $error = true;
-            $cadena_errores = $cadena_errores."\\n No has introducido la password del dominio";
+            $cadena_errores = $cadena_errores . "\\n No has introducido la password del dominio";
+        }
+        if (empty($dom_name)) {
+            $error = true;
+            $cadena_errores = $cadena_errores . "\\n No has introducido el nombre de dominio";
         }
 
         if (!$error) {
             # Ejecutamos el script para incluir en el dominio
-            $res = shell_exec("./assets/scripts/dominio.sh $cli_ip $cli_usuario '$cli_password' $dom_ip $dom_usuario '$dom_password'");
+            $res = shell_exec("./assets/scripts/dominio.sh $cli_ip $cli_usuario '$cli_password' $dom_ip $dom_usuario '$dom_password' $dom_name");
         } else {
-            echo '<script> alert("'.$cadena_errores_bd.'")</script>';
+            echo '<script> alert("' . $cadena_errores_bd . '")</script>';
         }
     }
 
-?>
+    ?>
 </body>
 
 </html>
