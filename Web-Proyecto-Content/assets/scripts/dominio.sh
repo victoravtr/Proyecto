@@ -7,6 +7,7 @@ CLI_PASSWORD=$3
 DOM_IP=$4
 DOM_USER=$5
 DOM_PASSWORD=$6
+DOM_NAME=$7
 
 # Comprobamos si ya se ha testeado la conexion
 PREF_METHOD_FILE="/etc/proyecto/general/${CLI_IP}"
@@ -42,23 +43,35 @@ if [ "$SISTEMA_DOM" != "windows" ]; then
     exit
 fi
 
-# A partir de aqui pueden ocurrir varios casos:
-#   - El cliente usa ssh y el servidor ssh
-#   - El cliente usa winrm y el servidor winrm
-#   - El cliente usa ssh y el servidor winrm
-#   - El cliente usa winrm y el servidor ssh
-
-# Dependiendo del metodo se ejecutara un script o otro aunque el funcionamiento
-#   sera el mismo:
-#       Descargar el script en el cliente/servidor
-#       Ejecutar el script
-#       Borrar el script
+# Copiamos el script de instalacion y lo descargamos en el equipo objetivo
+cp /var/www/proyecto/assets/scripts/join_domain.ps1 /var/www/html/uploads
+if ! [ $? -eq 0 ]; then
+    echo "Fallo al copiar el archivo en /uploads."
+    exit 1
+fi
 
 if [ "$PREF_METHOD_CLI" == "ssh" ]; then
-    COMMAND=""
-    RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND)
+
+    COMMAND="curl -o C:\Users\\${CLI_USER}\\join_domain.ps1 http://${SERVER_IP}/uploads/join_domainps1"
+    RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
     if ! [ $? -eq 0 ]; then
         echo "Fallo al descargar el archivo."
+        exit 1
+    fi
+
+    # Una vez descargado lo ejecutamos en el cliente
+    COMMAND="C:\Users\\${CLI_USER}\\join_domain.ps1 $CLI_IP $DOM_IP $DOM_USER $DOM_PASSWORD $DOM_NAME"
+    RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
+    if ! [ $? -eq 0 ]; then
+        echo "Fallo al descargar el archivo."
+        exit 1
+    fi
+fi
+
+if [ $PREF_METHOD == "winrm" ]; then
+    RES=$(python3 /home/victor/Documentos/GitHub/Proyecto/Web-Proyecto-Content/assets/scripts/domain.py $CLI_IP $CLI_USER $CLI_PASSWORD $DOM_IP $DOM_USER $DOM_PASSWORD $DOM_NAME)
+    if ! [ $RES -eq 0 ]; then
+        echo "Fallo al ejecutar script."
         exit 1
     fi
 fi
