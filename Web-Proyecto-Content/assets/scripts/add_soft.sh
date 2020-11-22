@@ -37,14 +37,14 @@ if [ $SISTEMA == "linux" ]; then
     fi
     COMMAND="echo \$HOME"
     RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND)
-    
+
     if ! [ $? -eq 0 ]; then
         echo "Fallo al descargar el archivo."
         exit 1
     fi
     # Descargamos el archivo en el equipo objetivo
     COMMAND="curl -o ${DIR}${FILE} http://${SERVER_IP}/uploads/${FILE}"
-    RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND);
+    RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND)
     if ! [ $? -eq 0 ]; then
         echo "Fallo al descargar el archivo."
         exit 1
@@ -54,17 +54,17 @@ if [ $SISTEMA == "linux" ]; then
     # Tenemos que setear DEBIAN_FRONTEND=noninteractive antes de instalarlo para que no salga prompts
     # Despues de instalar el programa seteamos a "" la variable
     COMMAND="export DEBIAN_FRONTEND=noninteractive && dpkg -i ${DIR}${FILE} && export DEBIAN_FRONTEND="
-    RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND);
+    RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND)
     if ! [ $? -eq 0 ]; then
         # Instalamos las dependencias si falla y volvemos a ejecutar el dpkg -i
         COMMAND="apt-get -f -y install"
-        RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND);
+        RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND)
         if ! [ $? -eq 0 ]; then
             echo "Fallo al instalar dependencias."
             exit 1
         fi
         COMMAND="export DEBIAN_FRONTEND=noninteractive && dpkg -i ${DIR}${FILE} && export DEBIAN_FRONTEND="
-        RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND);
+        RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND)
         if ! [ $? -eq 0 ]; then
             echo "Fallo al instalar."
             exit 1
@@ -73,14 +73,14 @@ if [ $SISTEMA == "linux" ]; then
 
     # Borramos el archivo en el cliente
     COMMAND="rm ${DIR}${FILE}"
-    RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND);
+    RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND)
     if ! [ $? -eq 0 ]; then
         echo "Fallo al borrar el archivo en el cliente."
         exit 1
     fi
 
     # Borramos el archivo en el servidor
-    RES=$(rm /var/www/html//uploads/${FILE});
+    RES=$(rm /var/www/html//uploads/${FILE})
     if ! [ $? -eq 0 ]; then
         echo "Fallo al borrar el archivo en el servidor."
         exit 1
@@ -98,7 +98,7 @@ if [ $SISTEMA == "windows" ]; then
         fi
         # Descargamos el archivo en el equipo objetivo
         COMMAND="curl -o C:\Users\\${USER}\\${FILE} http://${SERVER_IP}/uploads/${FILE}"
-        RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND);
+        RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND)
         if ! [ $? -eq 0 ]; then
             echo "Fallo al descargar el archivo."
             exit 1
@@ -106,7 +106,7 @@ if [ $SISTEMA == "windows" ]; then
         # Ejecutamos el archivo
         # Start-Process -FilePath C:\Users\victorav\chrome.exe -ArgumentList "/silent","/install" -PassThru -Verb runas;
         COMMAND="Start-Process -FilePath \"C:\Users\\${USER}\\${FILE}\" -ArgumentList \"/install\",\"/silent\" -PassThru -Verb runas"
-        RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND);
+        RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND)
 
         if ! [ $? -eq 0 ]; then
             echo "Fallo al ejecutar el archivo."
@@ -114,7 +114,7 @@ if [ $SISTEMA == "windows" ]; then
         fi
         # Una vez instalado borramos el archivo
         COMMAND="rm \"C:\Users\\${USER}\\${FILE}\""
-        RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND);
+        RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND)
         if ! [ $? -eq 0 ]; then
             echo "Fallo al borrar el archivo en el cliente."
             exit 1
