@@ -9,6 +9,8 @@ DOM_USER=$5
 DOM_PASSWORD=$6
 DOM_NAME=$7
 
+SERVER_IP=$(hostname -I | sed 's/ *$//g')
+
 # Comprobamos si ya se ha testeado la conexion
 PREF_METHOD_FILE="/etc/proyecto/general/${CLI_IP}"
 if ! [ -f "$PREF_METHOD_FILE" ]; then
@@ -44,34 +46,45 @@ if [ "$SISTEMA_DOM" != "windows" ]; then
 fi
 
 # Copiamos el script de instalacion y lo descargamos en el equipo objetivo
-cp /var/www/proyecto/assets/scripts/join_domain.ps1 /var/www/html/uploads
+# cp /var/www/proyecto/assets/scripts/join_domain.ps1 /var/www/html/uploads
+cp join_domain.ps1 /var/www/html/uploads
 if ! [ $? -eq 0 ]; then
     echo "Fallo al copiar el archivo en /uploads."
     exit 1
 fi
 
-if [ "$PREF_METHOD_CLI" == "ssh" ]; then
-
-    COMMAND="curl -o C:\Users\\${CLI_USER}\\join_domain.ps1 http://${SERVER_IP}/uploads/join_domainps1"
+# Generamos un archivo con la pass, lo copiamos en /uploads y lo descargamos en el cliente
+# Una vez descargado lo borramos del servidor
+if [ $PREF_METHOD_CLI == "ssh" ]; then
+    echo "Ejecutamos ssh"
+    COMMAND="curl -o C:\Users\\${CLI_USER}\\join_domain.ps1 http://${SERVER_IP}/uploads/join_domain.ps1"
     RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
     if ! [ $? -eq 0 ]; then
         echo "Fallo al descargar el archivo."
         exit 1
     fi
+    echo $COMMAND
+    echo $RES > log.txt
+    echo "Se descarga archivo en cliente"
 
     # Una vez descargado lo ejecutamos en el cliente
-    COMMAND="C:\Users\\${CLI_USER}\\join_domain.ps1 $CLI_IP $DOM_IP $DOM_USER $DOM_PASSWORD $DOM_NAME"
+    COMMAND="powershell.exe C:\Users\\${CLI_USER}\\join_domain.ps1 $CLI_IP $DOM_IP $DOM_USER $DOM_PASSWORD $DOM_NAME"
     RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
     if ! [ $? -eq 0 ]; then
         echo "Fallo al descargar el archivo."
         exit 1
     fi
+    echo $COMMAND
+    echo $RES >> log.txt
+    echo "Se mete en dominio"
 fi
 
-if [ $PREF_METHOD == "winrm" ]; then
-    RES=$(python3 /home/victor/Documentos/GitHub/Proyecto/Web-Proyecto-Content/assets/scripts/domain.py $CLI_IP $CLI_USER $CLI_PASSWORD $DOM_IP $DOM_USER $DOM_PASSWORD $DOM_NAME)
-    if ! [ $RES -eq 0 ]; then
-        echo "Fallo al ejecutar script."
-        exit 1
-    fi
+if [ $PREF_METHOD_CLI == "winrm" ]; then
+    echo "Solo se permite la inclusion en dominios por medio de SSH"
+    exit
+    # RES=$(python3 /home/victor/Documentos/GitHub/Proyecto/Web-Proyecto-Content/assets/scripts/domain.py $CLI_IP $CLI_USER $CLI_PASSWORD $DOM_IP $DOM_USER $DOM_PASSWORD $DOM_NAME)
+    # if ! [ $RES -eq 0 ]; then
+    #     echo "Fallo al ejecutar script."
+    #     exit
+    # fi
 fi
