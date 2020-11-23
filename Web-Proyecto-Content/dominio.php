@@ -55,13 +55,14 @@ if (empty($usuario)) {
     <?php
     if (isset($_POST['domain'])) {
         $error = false;
+        $cadena_errores = "Error al procesar los datos del formulario:";
 
         $cli_ip = trim($_POST['cli_ip']);
-        $cli_user = trim($_POST['cli_user']);
+        $cli_user = trim($_POST['cli_usuario']);
         $cli_password = trim($_POST['cli_password']);
 
         $dom_ip = trim($_POST['dom_ip']);
-        $dom_user = trim($_POST['dom_user']);
+        $dom_user = trim($_POST['dom_usuario']);
         $dom_password = trim($_POST['dom_password']);
         $dom_name = trim($_POST['dom_name']);
 
@@ -98,7 +99,7 @@ if (empty($usuario)) {
 
         if (!$error) {
             # Ejecutamos el script para incluir en el dominio
-            $res = shell_exec("./assets/scripts/dominio.sh $cli_ip $cli_usuario '$cli_password' $dom_ip $dom_usuario '$dom_password' $dom_name");
+            $res = shell_exec("./assets/scripts/dominio.sh $cli_ip $cli_user '$cli_password' $dom_ip $dom_user '$dom_password' $dom_name");
         } else {
             echo '<script> alert("' . $cadena_errores_bd . '")</script>';
         }
