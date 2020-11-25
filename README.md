@@ -6,9 +6,11 @@
 - Del 26 Octubre al 8 de Noviembre = Instalador
 - Del 9 al 15 de Noviembre = terminar login al 100% y script de para testear conexion.
 - Del 16 al 20 de Noviembre = apartado para despliegue de software
-- Del 20 al 22 de Noviembre = apartado para union equipos a dominio
+- Del 20 al 23 de Noviembre = apartado para union equipos a dominio
+- Del 24 al 26 de Noviembre = apartado para instalacion agentes Zabbix
 
 #### TO-DO LIST
+- [ ] Meter en instalador todas las carpetas que hay que crear y 
 - [ ] Requisito server: minimo la edicion 2010 para poder instalar OpenSSH
 - [ ] Hacer que en add_soft salga el output de los comandos
 - [ ] Hacer listado de silent switches para los programas, instalando exiftool podemos encontrar buena info de los exes para luego poder categorizarlos, como el nombre original del archivo por ejemplo
