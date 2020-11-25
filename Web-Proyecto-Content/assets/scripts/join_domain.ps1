@@ -11,7 +11,7 @@ Remove-Item -Path .\pass.txt
 $InterfaceIndex = Get-NetIPAddress -IPAddress $cli_ip | findstr InterfaceIndex
 $InterfaceIndex = $InterfaceIndex.Split(":").replace(' ','')
 $InterfaceIndex = $InterfaceIndex[1]
-#Set-DnsClientServerAddress -InterfaceIndex $InterfaceIndex -ServerAddresses ("$dom_ip")
+Set-DnsClientServerAddress -InterfaceIndex $InterfaceIndex -ServerAddresses ($dom_ip)
 $password = $( ConvertTo-SecureString  -String $password_file -AsPlainText -Force )
 $credential = New-Object System.Management.Automation.PSCredential -ArgumentList $dom_user, $password
 Add-Computer -DomainName $dom_name -Credential $credential -Restart
