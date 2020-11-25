@@ -42,10 +42,6 @@ if (empty($usuario)) {
                 </form>
 
                 <form action="index.php" method="post">
-                    <input type="submit" class="boton" name="shell" value="Abrir shell en equipo" />
-                </form>
-
-                <form action="index.php" method="post">
                     <input type="submit" class="boton" name="operar" value="Operar/Configurar equipo" />
                 </form>
 
@@ -59,7 +55,6 @@ if (empty($usuario)) {
         header("Location:dominio.php");
     }
 
-    // TODO: Crear add_soft.php y que haga sus cositas
     if (isset($_POST["add_soft"])) {
         header("Location:add_soft.php");
     }
@@ -72,11 +67,6 @@ if (empty($usuario)) {
     // TODO: Crear ossec.php y que haga sus cositas
     if (isset($_POST["ossec"])) {
         header("Location:ossec.php");
-    }
-
-    // TODO: Crear shell.php y que haga sus cositas
-    if (isset($_POST["shell"])) {
-        header("Location:shell.php");
     }
 
     // TODO: Crear operar.php y que haga sus cositas
