@@ -25,13 +25,21 @@ if (empty($usuario)) {
 
         <div class="card">
             <div class="contenido">
-                <form action="dominio.php" method="post">
+                <form action="zabbix.php" method="post">
                     <div class="upper-col">
                         <div class="left-col">
                             <h2>Datos cliente</h2>
                             <input type="text" name="cli_ip" placeholder="IP">
+                            <input type="text" name="cli_host" placeholder="Hostname">
                             <input type="text" name="cli_usuario" placeholder="Usuario">
                             <input type="password" name="cli_password" placeholder="Password">
+                            <div class="arquitectura">
+                                <label for="cli_arch">Arquitectura: </label>
+                                <select name="cli_arch">
+                                    <option value="64">64-bits</option>
+                                    <option value="32">32-bits</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="center-col">
                             <h2>Datos servidor</h2>
@@ -55,8 +63,10 @@ if (empty($usuario)) {
         $cadena_errores = "Error al procesar los datos del formulario:";
 
         $cli_ip = trim($_POST['cli_ip']);
+        $cli_host = trim($_POST['cli_host']);
         $cli_user = trim($_POST['cli_usuario']);
         $cli_password = trim($_POST['cli_password']);
+        $cli_arch =  trim($_POST['cli_arch']);
 
         $server_ip = trim($_POST['server_ip']);
 
@@ -64,6 +74,10 @@ if (empty($usuario)) {
         if (empty($cli_ip)) {
             $error = true;
             $cadena_errores = $cadena_errores . "\\n No has introducido la IP del cliente";
+        }
+        if (empty($cli_host)) {
+            $error = true;
+            $cadena_errores = $cadena_errores . "\\n No has introducido el Hostname del cliente";
         }
         if (empty($cli_user)) {
             $error = true;
@@ -81,7 +95,7 @@ if (empty($usuario)) {
 
         if (!$error) {
             # Ejecutamos el script para incluir en el dominio
-            $res = shell_exec("./assets/scripts/zabbix.sh $cli_ip $cli_user '$cli_password' $server_ip");
+            $res = shell_exec("./assets/scripts/zabbix.sh $cli_ip $cli_host $cli_user '$cli_password' $cli_arch $server_ip");
         } else {
             echo '<script> alert("' . $cadena_errores_bd . '")</script>';
         }
