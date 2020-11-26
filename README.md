@@ -10,6 +10,7 @@
 - Del 24 al 26 de Noviembre = apartado para instalacion agentes Zabbix
 
 #### TO-DO LIST
+- [ ] Hacer una tabla para la documentacion en que aparezca cada sistema operativo en el que se ha probado y si la prueba ha sido satisfactoria o no
 - [ ] Meter en instalador todas las carpetas que hay que crear y 
 - [ ] Requisito server: minimo la edicion 2010 para poder instalar OpenSSH
 - [ ] Hacer que en add_soft salga el output de los comandos
