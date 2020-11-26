@@ -80,7 +80,7 @@ if [ $SISTEMA == "windows" ]; then
         RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
         # Ejecutamos el instalador usando el archivo de configuracion
         # msiexec.exe /I zabbix_agent-5.2.1-windows-amd64-openssl.msi SERVER=192.168.10.12
-        COMMAND="C:\Users\\${CLI_USER}\\zabbix_agentd.exe  --config zabbix_agentd.conf --install"
+        COMMAND="C:\Users\\${CLI_USER}\\zabbix_agentd.exe  --config C:\Users\\${CLI_USER}\\zabbix_agentd.conf --install"
         RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
         if ! [ $? -eq 0 ]; then
             echo "Fallo al ejecutar el archivo."
@@ -96,10 +96,45 @@ if [ $SISTEMA == "windows" ]; then
         fi
     fi
     if [ $PREF_METHOD_CLI == "winrm" ]; then
-        RES=$(python3 /home/victor/Documentos/GitHub/Proyecto/Web-Proyecto-Content/assets/scripts/domain.py $CLI_IP $CLI_USER $CLI_PASSWORD $DOM_IP $DOM_USER $DOM_PASSWORD $DOM_NAME)
+        RES=$(python3 /home/victor/Documentos/GitHub/Proyecto/Web-Proyecto-Content/assets/scripts/zabbix.py $CLI_IP $CLI_USER $CLI_PASSWORD $DOM_IP $DOM_USER $DOM_PASSWORD $DOM_NAME)
         if ! [ $RES -eq 0 ]; then
             echo "Fallo al ejecutar script."
             exit
         fi
+    fi
+fi
+
+if [ $SISTEMA == "linux" ]; then
+    if [ "$PREF_METHOD" == "ssh" ]; then
+        # Comprobamos si es Debian o Ubuntu, los 2 sistemas soportados por el momento
+        COMMAND="lsb_release -i -s | grep Debian"
+        SISTEMA_OPERATIVO=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
+        if ! [ $? -eq 0 ]; then
+            echo "Fallo al descargar el instalador."
+            exit 1
+        fi
+
+        if [ -$SISTEMA_OPERATIVO == "Ubuntu" ]; then
+            COMMAND="wget https://repo.zabbix.com/zabbix/5.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_5.0-1+$(lsb_release -sc)_all.deb"
+            RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
+            if ! [ $? -eq 0 ]; then
+                echo "Fallo al descargar el instalador."
+                exit 1
+            fi
+            COMMAND="dpkg -i zabbix-release_5.0-1+$(lsb_release -sc)_all.deb"
+            COMMAND="apt update"
+            COMMAND="apt -y install zabbix-agent"
+        elif [ $SISTEMA_OPERATIVO == "Debian" ]; then
+            COMMAND="sudo wget https://repo.zabbix.com/zabbix/5.0/debian/pool/main/z/zabbix-release/zabbix-release_5.0-1+$(lsb_release -sc)_all.deb"
+            COMMAND="sudo dpkg -i zabbix-release_5.0-1+$(lsb_release -sc)_all.deb"
+            COMMAND="apt update"
+            COMMAND="apt -y install zabbix-agent"
+        else
+            echo "Sistema operativo no soportado"
+            exit 1
+        fi
+    else
+        echo "Solo se permite esta operacion desde ssh"
+        exit 1
     fi
 fi
