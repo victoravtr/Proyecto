@@ -8,6 +8,12 @@
 - Del 16 al 20 de Noviembre = apartado para despliegue de software
 - Del 20 al 23 de Noviembre = apartado para union equipos a dominio
 - Del 24 al 26 de Noviembre = apartado para instalacion agentes Zabbix
+- Del 27 al 28 de Noviembre = apartado para instalacion agentes alienvault
+      - Se decide no continuar con este apartado ya que Alienvault ya cuenta con las opciones necesarias para realizar el deployment de forma sencilla
+- Del 28 al 29 de Noviembre = apartado para ejecucion de comandos y shell
+- Del 30 al 4 de Diciembre = testeo y correccion de errores
+- Del 5 al 6 de Diciembre = preparacion de documentacion
+- Del 7 al 8 de Diciembre = documentacion proyecto y grabacion + edicion de video presentacion
 
 #### TO-DO LIST
 - [ ] Hacer una tabla para la documentacion en que aparezca cada sistema operativo en el que se ha probado y si la prueba ha sido satisfactoria o no
