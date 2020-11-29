@@ -1,3 +1,5 @@
+#!/bin/bash
+
 IP=$1
 USER=$2
 PASS=$3
