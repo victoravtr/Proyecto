@@ -78,7 +78,7 @@
       $SISTEMA = shell_exec("./assets/scripts/check_os.sh");
       $STRING .= "sistema:${SISTEMA}\n";
     }
-    
+
     if ($PREF_METHOD == "") {
       $STRING .= "pref_method:false";
     } else {
@@ -86,44 +86,6 @@
     }
     $CONF_FILE .= $IP;
     file_put_contents($CONF_FILE, $STRING);
-
-
-
-    // $IP=trim($_POST['ip']);
-    // $USER=trim($_POST['usuario']);
-    // $PASS=trim($_POST['password']);
-    // $COMMAND="whoami";
-
-    // if (empty($USER)) {
-    // 	$error=true;
-    // 	$cadena_errores = $cadena_errores."\\n No has introducido un usuario";
-    // }
-
-    // if (empty($PASS)) {
-    // 	$error=true;
-    // 	$cadena_errores = $cadena_errores."\\n No has introducido una pass";
-    // }
-
-    // if (empty($IP)) {
-    // 	$error=true;
-    // 	$cadena_errores = $cadena_errores."\\n No has introducido una IP";
-    // }
-
-    // if ($error) {
-    //   echo '<script> alert("'.$cadena_errores_bd.'")</script>';
-    // } else {
-    //   echo "<pre>Comprobando conexion por ssh: </pre>";
-    //   $output = shell_exec("bash assets/scripts/connect_ssh.sh $IP $USER $PASS");
-    //   if ($output==0) {
-    //     echo "<pre>La conexion por ssh ha sido exitosa.</pre>";
-    //     $output = shell_exec("bash assets/scripts/exec_ssh.sh $IP $USER '$PASS' $COMMAND");
-    //     echo $output;
-    //   } else {
-    //     echo "<pre>No se ha podido conectar por ssh.</pre>";
-    //   }
-    // }
-
-
   }
 
 
