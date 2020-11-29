@@ -107,14 +107,14 @@ fi
 if [ $SISTEMA == "linux" ]; then
     if [ "$PREF_METHOD" == "ssh" ]; then
         # Comprobamos si es Debian o Ubuntu, los 2 sistemas soportados por el momento
-        COMMAND="lsb_release -i -s | grep Debian"
+        COMMAND="lsb_release -i -s | tr -dc '[:print:]'"
         SISTEMA_OPERATIVO=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
         if ! [ $? -eq 0 ]; then
             echo "Fallo al descargar el instalador."
             exit 1
         fi
-
-        if [ $SISTEMA_OPERATIVO == "Ubuntu" ]; then
+        echo $SISTEMA_OPERATIVO
+        if [ "$SISTEMA_OPERATIVO" == "Ubuntu" ]; then
             COMMAND="lsb_release -sc | tr -dc '[:print:]'"
             VERSION=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
             if ! [ $? -eq 0 ]; then
@@ -150,7 +150,7 @@ if [ $SISTEMA == "linux" ]; then
                 echo "Fallo al instalar zabbix."
                 exit 1
             fi
-        elif [ $SISTEMA_OPERATIVO == "Debian" ]; then
+        elif [ "$SISTEMA_OPERATIVO" == "Debian" ]; then
             COMMAND="lsb_release -sc | tr -dc '[:print:]'"
             VERSION=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
             if ! [ $? -eq 0 ]; then
@@ -171,13 +171,29 @@ if [ $SISTEMA == "linux" ]; then
                 echo "Fallo al ejecutar el instalador."
                 exit 1
             fi
+
             COMMAND="apt update"
+            RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
+            if ! [ $? -eq 0 ]; then
+                echo "Fallo al ejecutar el instalador."
+                exit 1
+            fi
 
             COMMAND="apt -y install zabbix-agent"
+            RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
+            if ! [ $? -eq 0 ]; then
+                echo "Fallo al ejecutar el instalador."
+                exit 1
+            fi
+
         else
             echo "Sistema operativo no soportado"
             exit 1
         fi
+
+        # Paramos el servicio
+        # Borramos el /etc/zabbix/zabbix_agent.conf y descargamos el nuestro nuestro ahi
+        # Volvemos a iniciar el servicio
     else
         echo "Solo se permite esta operacion desde ssh"
         exit 1
