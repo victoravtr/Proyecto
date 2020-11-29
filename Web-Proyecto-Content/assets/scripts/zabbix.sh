@@ -114,20 +114,65 @@ if [ $SISTEMA == "linux" ]; then
             exit 1
         fi
 
-        if [ -$SISTEMA_OPERATIVO == "Ubuntu" ]; then
-            COMMAND="wget https://repo.zabbix.com/zabbix/5.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_5.0-1+$(lsb_release -sc)_all.deb"
+        if [ $SISTEMA_OPERATIVO == "Ubuntu" ]; then
+            COMMAND="lsb_release -sc | tr -dc '[:print:]'"
+            VERSION=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
+            if ! [ $? -eq 0 ]; then
+                echo "No se ha podido obtener la version del sistema operativo."
+                exit 1
+            fi
+
+            COMMAND="wget https://repo.zabbix.com/zabbix/5.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_5.0-1+${VERSION}_all.deb"
             RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
             if ! [ $? -eq 0 ]; then
                 echo "Fallo al descargar el instalador."
                 exit 1
             fi
-            COMMAND="dpkg -i zabbix-release_5.0-1+$(lsb_release -sc)_all.deb"
+
+            # Tenemos que setear DEBIAN_FRONTEND=noninteractive antes de instalarlo para que no salga prompts
+            # Despues de instalar el programa seteamos a "" la variable
+            COMMAND="export DEBIAN_FRONTEND=noninteractive && dpkg -i zabbix-release_5.0-1+${VERSION}_all.deb && export DEBIAN_FRONTEND="
+            RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
+            if ! [ $? -eq 0 ]; then
+                echo "Fallo al ejecutar el instalador."
+                exit 1
+            fi
             COMMAND="apt update"
+            RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
+            if ! [ $? -eq 0 ]; then
+                echo "Fallo al realizar update."
+                exit 1
+            fi
+
             COMMAND="apt -y install zabbix-agent"
+            RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
+            if ! [ $? -eq 0 ]; then
+                echo "Fallo al instalar zabbix."
+                exit 1
+            fi
         elif [ $SISTEMA_OPERATIVO == "Debian" ]; then
-            COMMAND="sudo wget https://repo.zabbix.com/zabbix/5.0/debian/pool/main/z/zabbix-release/zabbix-release_5.0-1+$(lsb_release -sc)_all.deb"
-            COMMAND="sudo dpkg -i zabbix-release_5.0-1+$(lsb_release -sc)_all.deb"
+            COMMAND="lsb_release -sc | tr -dc '[:print:]'"
+            VERSION=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
+            if ! [ $? -eq 0 ]; then
+                echo "No se ha podido obtener la version del sistema operativo."
+                exit 1
+            fi
+
+            COMMAND="sudo wget https://repo.zabbix.com/zabbix/5.0/debian/pool/main/z/zabbix-release/zabbix-release_5.0-1+${VERSION}_all.deb"
+            RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
+            if ! [ $? -eq 0 ]; then
+                echo "Fallo al descargar el archivo."
+                exit 1
+            fi
+
+            COMMAND="export DEBIAN_FRONTEND=noninteractive && dpkg -i zabbix-release_5.0-1+${VERSION}_all.deb && export DEBIAN_FRONTEND="
+            RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
+            if ! [ $? -eq 0 ]; then
+                echo "Fallo al ejecutar el instalador."
+                exit 1
+            fi
             COMMAND="apt update"
+
             COMMAND="apt -y install zabbix-agent"
         else
             echo "Sistema operativo no soportado"
