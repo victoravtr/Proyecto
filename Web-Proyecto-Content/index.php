@@ -38,10 +38,6 @@ if (empty($usuario)) {
                 </form>
 
                 <form action="index.php" method="post">
-                    <input type="submit" class="boton" name="ossec" value="Añadir agente ossec en equipo" />
-                </form>
-
-                <form action="index.php" method="post">
                     <input type="submit" class="boton" name="operar" value="Operar/Configurar equipo" />
                 </form>
 
@@ -62,11 +58,6 @@ if (empty($usuario)) {
     // TODO: Crear zabbix.php y que haga sus cositas
     if (isset($_POST["zabbix"])) {
         header("Location:zabbix.php");
-    }
-
-    // TODO: Crear ossec.php y que haga sus cositas
-    if (isset($_POST["ossec"])) {
-        header("Location:ossec.php");
     }
 
     // TODO: Crear operar.php y que haga sus cositas
