@@ -27,7 +27,7 @@ SISTEMA=$(cat /etc/proyecto/general/${IP} | grep sistema | cut -d ":" -f 2)
 # Ademas dependiendo del sistema cambia el directorio de descargar y los comandos
 #   para hacer la instalacion
 
-if [ $SISTEMA == "linux" ]; then
+if [ "$SISTEMA" == "Ubuntu" ] || [ "$SISTEMA" == "Debian" ]; then
     # Home Dir
     if [ $USER == "root" ]; then
         DIR="/root/"
@@ -35,13 +35,7 @@ if [ $SISTEMA == "linux" ]; then
     if [ $USER != "root" ]; then
         DIR="/home/${USER}/"
     fi
-    COMMAND="echo \$HOME"
-    RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND)
-
-    if ! [ $? -eq 0 ]; then
-        echo "Fallo al descargar el archivo."
-        exit 1
-    fi
+    
     # Descargamos el archivo en el equipo objetivo
     COMMAND="curl -o ${DIR}${FILE} http://${SERVER_IP}/uploads/${FILE}"
     RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND)
