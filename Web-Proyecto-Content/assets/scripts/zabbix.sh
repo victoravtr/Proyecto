@@ -9,6 +9,8 @@ CLI_ARCH=$5
 SERVER_IP=$6
 
 LOCAL_SERVER_IP=$(hostname -I | sed 's/ *$//g')
+
+LOCAL_SERVER_IP=$(hostname -I | sed 's/ *$//g')
 URL_DESCARGA_CONFIG="http://${LOCAL_SERVER_IP}/uploads/zabbix_agentd.conf"
 
 # Comprobamos si ya se ha testeado la conexion
@@ -192,8 +194,48 @@ if [ $SISTEMA == "linux" ]; then
         fi
 
         # Paramos el servicio
-        # Borramos el /etc/zabbix/zabbix_agent.conf y descargamos el nuestro nuestro ahi
+        COMMAND="systemctl stop zabbix-agent"
+        RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
+        if ! [ $? -eq 0 ]; then
+            echo "Fallo al parar el servicio."
+            exit 1
+        fi
+
+        # Editamos el archivo zabbix_agentd.conf
+        COMMAND="sed -i \"s/Server=127.0.0.1/Server=${SERVER_IP}/\" /etc/zabbix/zabbix_agentd.conf"
+        RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
+        if ! [ $? -eq 0 ]; then
+            echo "Fallo al editar el archivo en zabbix_agentd.conf."
+            exit 1
+        fi
+        COMMAND="sed -i \"s/Hostname=Zabbix server/Hostname=${CLI_HOST}/\" /etc/zabbix/zabbix_agentd.conf"
+        echo $COMMAND
+        RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
+        if ! [ $? -eq 0 ]; then
+            echo "Fallo al editar el archivo en zabbix_agentd.conf."
+            exit 1
+        fi
+
         # Volvemos a iniciar el servicio
+        COMMAND="systemctl start zabbix-agent"
+        RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
+        if ! [ $? -eq 0 ]; then
+            echo "Fallo al iniciar el servicio."
+            exit 1
+        fi
+
+        # Un vez instalado y configurado borramos todos los archivos: el .deb y el archivo de configuracion en uploads.
+        rm /var/www/html/uploads/zabbix_agentd.conf
+        if ! [ $? -eq 0 ]; then
+            echo "Fallo al borrar el archivo /uploads/zabbix_agentd.conf."
+            exit 1
+        fi
+        COMMAND="rm zabbix-release_5.0-1+${VERSION}_all.deb"
+        RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
+        if ! [ $? -eq 0 ]; then
+            echo "Fallo al borrar el archivo zabbix-release_5.0-1+${VERSION}_all.deb"
+            exit 1
+        fi
     else
         echo "Solo se permite esta operacion desde ssh"
         exit 1
