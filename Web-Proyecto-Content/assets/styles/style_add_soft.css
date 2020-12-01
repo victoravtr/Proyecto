@@ -103,3 +103,26 @@ form {
     display: flex;
     flex-direction: column;
 }
+
+.right-col p {
+    font-size: 1rem;
+    margin: 0;
+}
+
+h2 {
+    color: white;
+}
+
+.rojo {
+    color: red;
+}
+
+.verde {
+    color: #38ef7d;
+}
+
+hr {
+    height: 1px;
+    border-color: white;
+    width: 100%;
+}
