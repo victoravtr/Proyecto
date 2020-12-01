@@ -38,7 +38,7 @@ if (empty($usuario)) {
                 </form>
 
                 <form action="index.php" method="post">
-                    <input type="submit" class="boton" name="operar" value="Operar/Configurar equipo" />
+                    <input type="submit" class="boton" name="rshell" value="Abrir shell remota a equipo" />
                 </form>
 
             </div>
@@ -61,8 +61,8 @@ if (empty($usuario)) {
     }
 
     // TODO: Crear operar.php y que haga sus cositas
-    if (isset($_POST["operar"])) {
-        header("Location:operar.php");
+    if (isset($_POST["rshell"])) {
+        header("Location:rshell.php");
     }
     ?>
 </body>
