@@ -5,20 +5,22 @@ USER=$2
 PASS=$3
 FILE=$4
 SERVER_IP=$(hostname -I | sed 's/ *$//g')
-LOG=""
+STR=""
 # Comprobar conexion con equipo
 #   Leemos archivo, comprobando antes si existe, para ver si hay un metodo preferido.
 PREF_METHOD_FILE="/etc/proyecto/general/${IP}"
 if ! [ -f $PREF_METHOD_FILE ]; then
-    echo "El archivo no existe, se creara automaticamente usando http://proyecto.local/test.php "
-    exit
+    STR="$STR\n El archivo no existe, se creara automaticamente usando http://proyecto.local/test.php "
+    echo $STR
+    exit 1
 fi
 
 PREF_METHOD=$(tail -n 1 /etc/proyecto/general/${IP} | cut -d ":" -f 2)
 
 if [ $PREF_METHOD == "false" ]; then
-    echo "Debes habilitar alguna forma de comunicacion y ejecutar http://proyecto.local/test.php "
-    exit
+    STR="$STR\n Debes habilitar alguna forma de comunicacion y ejecutar http://proyecto.local/test.php "
+    echo $STR
+    exit 1
 fi
 
 SISTEMA=$(cat /etc/proyecto/general/${IP} | grep sistema | cut -d ":" -f 2)
@@ -27,9 +29,9 @@ SISTEMA=$(cat /etc/proyecto/general/${IP} | grep sistema | cut -d ":" -f 2)
 # SI el sistema es Linux solo se podra usar ssh
 # Ademas dependiendo del sistema cambia el directorio de descargar y los comandos
 #   para hacer la instalacion
-EXT=$(${FILE: -3})
+EXT=${FILE: -3}
 
-if [ "$SISTEMA" == "Ubuntu" ] || [ "$SISTEMA" == "Debian" ]; then
+if [ "$SISTEMA" == "linux" ]; then
     # Home Dir
     if [ $USER == "root" ]; then
         DIR="/root/"
@@ -42,9 +44,11 @@ if [ "$SISTEMA" == "Ubuntu" ] || [ "$SISTEMA" == "Debian" ]; then
     COMMAND="curl -o ${DIR}${FILE} http://${SERVER_IP}/uploads/${FILE}"
     RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND)
     if ! [ $? -eq 0 ]; then
-        LOG="$LOG \n Fallo al descargar el archivo."
+        STR="$STR\n Fallo al descargar el archivo."
+        echo $STR
         exit 1
     fi
+    STR="$STR\n 0!@Archivo descargado en el cliente."
 
     if [ "$EXT" == "deb" ]; then
         # Instalamos el archivo con dpkg
@@ -57,16 +61,21 @@ if [ "$SISTEMA" == "Ubuntu" ] || [ "$SISTEMA" == "Debian" ]; then
             COMMAND="apt-get -f -y install"
             RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND)
             if ! [ $? -eq 0 ]; then
-                echo "Fallo al instalar dependencias."
+                STR="$STR\n 1!@Fallo al instalar dependencias: $RES"
+                echo $STR
                 exit 1
             fi
+
             COMMAND="export DEBIAN_FRONTEND=noninteractive && dpkg -i ${DIR}${FILE} && export DEBIAN_FRONTEND="
             RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND)
             if ! [ $? -eq 0 ]; then
-                echo "Fallo al instalar."
+                STR="$STR\n 1!@Fallo al instalar el archivo: $RES"
+                echo $STR
                 exit 1
             fi
         fi
+        STR="$STR\n Archivo instalado."
+
     elif [ "$EXT" == "rpm" ]; then
         # Instalamos el archivo con rpm
         # Tenemos que setear DEBIAN_FRONTEND=noninteractive antes de instalarlo para que no salga prompts
@@ -78,37 +87,50 @@ if [ "$SISTEMA" == "Ubuntu" ] || [ "$SISTEMA" == "Debian" ]; then
             COMMAND="apt-get -f -y install"
             RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND)
             if ! [ $? -eq 0 ]; then
-                echo "Fallo al instalar dependencias."
+                STR="$STR\n 1!@Fallo al instalar dependencias: $RES"
+                echo $STR
                 exit 1
             fi
             COMMAND="export DEBIAN_FRONTEND=noninteractive && rpm -i ${DIR}${FILE} && export DEBIAN_FRONTEND="
             RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND)
             if ! [ $? -eq 0 ]; then
-                echo "Fallo al instalar."
+                STR="$STR\n 1!@Fallo al instalar instalar el archivo: $RES"
+                echo $STR
                 exit 1
             fi
+            STR="$STR\n 0!@Archivo instalado"
         fi
     else
-        echo "Tipo de archivos no permitidos."
+        STR="$STR\n 1!@Tipo de archivo no permitido en este sistema,"
+        echo $STR
         exit 1
     fi
     # Borramos el archivo en el cliente
     COMMAND="rm ${DIR}${FILE}"
     RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND)
     if ! [ $? -eq 0 ]; then
-        echo "Fallo al borrar el archivo en el cliente."
+        STR="$STR\n 1!@Fallo al borrar el archivo en el cliente: $RES"
+        echo $STR
         exit 1
     fi
+    STR="$STR\n 1!@Archivo eliminado en el cliente."
+    echo $STR
+    exit 1
 
     # Borramos el archivo en el servidor
     RES=$(rm /var/www/html//uploads/${FILE})
     if ! [ $? -eq 0 ]; then
-        echo "Fallo al borrar el archivo en el servidor."
+        STR="$STR\n 1!@Fallo al eliminar el archivo del servidor: $RES"
+        echo $STR
         exit 1
     fi
+    STR="$STR\n 0!@Archivo eliminado del servidor."
+    STR="$STR\n 0!@Instalacion de software finalizada."
+    echo $STR
+    exit 0
 fi
 
-if [ $SISTEMA == "windows" ]; then
+if [ "$SISTEMA" == "windows" ]; then
 
     # Si pref_method es ssh ejecutamos las ordenes aqui, si es winrm ejecutamos el script de python
     if [ $PREF_METHOD == "ssh" ]; then
@@ -159,4 +181,9 @@ if [ $SISTEMA == "windows" ]; then
             exit 1
         fi
     fi
+fi
+
+if [ "$SISTEMA" != "windows" ] && [ "$SISTEMA" != "linux" ]; then
+    echo "Sistema no soportado."
+    exit 1
 fi
