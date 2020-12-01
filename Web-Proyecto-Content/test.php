@@ -72,12 +72,7 @@
         $STRING .= "${key}:false\n";
       }
     }
-    if ($SISTEMA == "windows") {
-      $STRING .= "sistema:${SISTEMA}\n";
-    } else {
-      $SISTEMA = shell_exec("./assets/scripts/check_os.sh");
-      $STRING .= "sistema:${SISTEMA}\n";
-    }
+    $STRING .= "sistema:${SISTEMA}\n";
 
     if ($PREF_METHOD == "") {
       $STRING .= "pref_method:false";
