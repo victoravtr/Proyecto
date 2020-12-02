@@ -37,7 +37,7 @@ INSTALL_DIR=$(pwd)
 echo -e "${Blue}Comprobando si se ejecuta con sudo: $Color_Off"
 USER_ID="$EUID"
 if [[ -z "$USER_ID" ]]; then
-    $USER_ID=0
+    USER_ID=0
 fi
 
 if [[ $USER_ID = 0 ]]; then
