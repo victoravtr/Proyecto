@@ -16,11 +16,10 @@
 - Del 7 al 8 de Diciembre = documentacion proyecto y grabacion + edicion de video presentacion
 
 #### TO-DO LIST
+- [ ] Meter npm en instalador y forever tambien
 - [ ] Hacer una tabla para la documentacion en que aparezca cada sistema operativo en el que se ha probado y si la prueba ha sido satisfactoria o no
 - [ ] Meter en instalador todas las carpetas que hay que crear y 
 - [ ] Requisito server: minimo la edicion 2010 para poder instalar OpenSSH
-- [ ] Hacer que en add_soft salga el output de los comandos
-- [ ] Hacer listado de silent switches para los programas, instalando exiftool podemos encontrar buena info de los exes para luego poder categorizarlos, como el nombre original del archivo por ejemplo
 - [ ] Editar php.ini para meter mas upload_max_filesize y post_max_size
 - [ ] Meter en add_soft lista de programas tipicos para instalar y hacer scripts personalizados
   - [ ] Meter tambien aviso de que algunos programas no funcionan. Chrome por ejemplo falla porque el instalador primero descargar el programa y despues lo instala el mismo
