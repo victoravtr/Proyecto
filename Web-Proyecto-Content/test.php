@@ -45,11 +45,6 @@
       "PSRemoting" => "connect_psremote.sh"
     );
 
-
-    $user = trim(shell_exec("whoami"));
-    $hostname = trim(shell_exec("hostname"));
-    $path = trim(shell_exec("pwd"));
-    $COMMAND = "ipconfig";
     $STRING = "";
     $CONF_FILE = "/etc/proyecto/general/";
     $PREF_METHOD = "";
