@@ -16,6 +16,56 @@ if (empty($usuario)) {
 </head>
 
 <body>
+    <?php
+    if (isset($_POST['domain'])) {
+        $error = false;
+        $res = array();
+
+        $cli_ip = trim($_POST['cli_ip']);
+        $cli_host = trim($_POST['cli_host']);
+        $cli_user = trim($_POST['cli_usuario']);
+        $cli_password = trim($_POST['cli_password']);
+        $cli_arch =  trim($_POST['cli_arch']);
+
+        $server_ip = trim($_POST['server_ip']);
+
+        # Comprobamos las variables
+        if (empty($cli_ip)) {
+            $error = true;
+            array_push($res, "1!@No has introducido una IP.");
+        }
+        if (empty($cli_host)) {
+            $error = true;
+            array_push($res, "1!@No has introducido el Hostname del cliente.");
+        }
+        if (empty($cli_user)) {
+            $error = true;
+            array_push($res, "1!@No has introducido el usuario del cliente.");
+        }
+        if (empty($cli_password)) {
+            $error = true;
+            $array_push($res, "1!@No has introducido la password del cliente.");
+        }
+
+        if (empty($server_ip)) {
+            $error = true;
+            array_push($res, "1!@No has introducido la IP del servidor.");
+        }
+
+        if (!$error) {
+            # Ejecutamos el script para incluir en el dominio
+            $out = shell_exec("./assets/scripts/zabbix.sh $cli_ip $cli_host $cli_user '$cli_password' $cli_arch $server_ip");
+            $piezas = explode('\n', $out);
+            foreach ($piezas as $pieza) {
+                if (!empty($pieza)) {
+                    array_push($res, $pieza);
+                }
+            }
+        } else {
+            array_push($res, "1!@Error al tratar los datos del formulario.");
+        }
+    }
+    ?>
 
     <a class="config" href="index.php">Volver </a>
     <a class="cerrar" href="logout.php">Cerrar sesión</a>
@@ -47,6 +97,19 @@ if (empty($usuario)) {
                         </div>
                         <div class="right-col">
                             <h2>Output: </h2>
+                            <?php
+                            if (!empty($res)) {
+                                foreach ($res as $linea) {
+                                    $linea = explode('!@', $linea);
+                                    if ($linea[0] == "0") {
+                                        echo "<p class=\"verde\">$linea[1]</p>";
+                                    } else {
+                                        echo "<p class=\"rojo\">$linea[1]</p>";
+                                    }
+                                    echo "<hr></hr>";
+                                }
+                            }
+                            ?>
                         </div>
                     </div>
                     <div class="bottom-col">
@@ -56,52 +119,6 @@ if (empty($usuario)) {
             </div>
         </div>
     </div>
-
-    <?php
-    if (isset($_POST['domain'])) {
-        $error = false;
-        $cadena_errores = "Error al procesar los datos del formulario:";
-
-        $cli_ip = trim($_POST['cli_ip']);
-        $cli_host = trim($_POST['cli_host']);
-        $cli_user = trim($_POST['cli_usuario']);
-        $cli_password = trim($_POST['cli_password']);
-        $cli_arch =  trim($_POST['cli_arch']);
-
-        $server_ip = trim($_POST['server_ip']);
-
-        # Comprobamos las variables
-        if (empty($cli_ip)) {
-            $error = true;
-            $cadena_errores = $cadena_errores . "\\n No has introducido la IP del cliente";
-        }
-        if (empty($cli_host)) {
-            $error = true;
-            $cadena_errores = $cadena_errores . "\\n No has introducido el Hostname del cliente";
-        }
-        if (empty($cli_user)) {
-            $error = true;
-            $cadena_errores = $cadena_errores . "\\n No has introducido el usuario del cliente";
-        }
-        if (empty($cli_password)) {
-            $error = true;
-            $cadena_errores = $cadena_errores . "\\n No has introducido la password del cliente";
-        }
-
-        if (empty($server_ip)) {
-            $error = true;
-            $cadena_errores = $cadena_errores . "\\n No has introducido la IP del servidor";
-        }
-
-        if (!$error) {
-            # Ejecutamos el script para incluir en el dominio
-            $res = shell_exec("./assets/scripts/zabbix.sh $cli_ip $cli_host $cli_user '$cli_password' $cli_arch $server_ip");
-        } else {
-            echo '<script> alert("' . $cadena_errores_bd . '")</script>';
-        }
-    }
-
-    ?>
 </body>
 
 </html>
