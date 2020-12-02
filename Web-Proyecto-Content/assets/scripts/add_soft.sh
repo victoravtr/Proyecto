@@ -10,7 +10,7 @@ STR=""
 #   Leemos archivo, comprobando antes si existe, para ver si hay un metodo preferido.
 PREF_METHOD_FILE="/etc/proyecto/general/${IP}"
 if ! [ -f $PREF_METHOD_FILE ]; then
-    STR="$STR\n El archivo no existe, se creara automaticamente usando http://proyecto.local/test.php "
+    STR="$STR\n 1!@El archivo no existe, se creara automaticamente usando http://proyecto.local/test.php "
     echo $STR
     exit 1
 fi
@@ -18,7 +18,7 @@ fi
 PREF_METHOD=$(tail -n 1 /etc/proyecto/general/${IP} | cut -d ":" -f 2)
 
 if [ $PREF_METHOD == "false" ]; then
-    STR="$STR\n Debes habilitar alguna forma de comunicacion y ejecutar http://proyecto.local/test.php "
+    STR="$STR\n 1!@Debes habilitar alguna forma de comunicacion y ejecutar http://proyecto.local/test.php "
     echo $STR
     exit 1
 fi
@@ -44,7 +44,7 @@ if [ "$SISTEMA" == "linux" ]; then
     COMMAND="curl -o ${DIR}${FILE} http://${SERVER_IP}/uploads/${FILE}"
     RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND)
     if ! [ $? -eq 0 ]; then
-        STR="$STR\n Fallo al descargar el archivo."
+        STR="$STR\n 1!@Fallo al descargar el archivo."
         echo $STR
         exit 1
     fi
@@ -139,51 +139,85 @@ if [ "$SISTEMA" == "windows" ]; then
         COMMAND="curl -o C:\Users\\${USER}\\${FILE} http://${SERVER_IP}/uploads/${FILE}"
         RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND)
         if ! [ $? -eq 0 ]; then
-            echo "Fallo al descargar el archivo."
+            STR="$STR\n 1!@Fallo al descargar el archivo en el cliente: $RES"
+            echo $STR
             exit 1
         fi
 
         if [ "$EXT" == "exe" ]; then
+            # Comprobamos el Producto name con exiftool
+            # Comprobamos si coincide con alguna entrada de exe_switch.txt
+            # SI hay alguna entrada, ponemos sus argumentos, si no ponemos los default
+            DEFAULT_SWITCH="\"/qn\""
+
+            PRODUCTO_NAME="exiftool $FILE | grep \"Product Name\" | cut -d \":\" -f 2 | xargs"
+            COINCIDENCIA="cat /var/proyecto/general/exe_switch | grep $FILE"
+
+            if [ -n "$PRODUCTO_NAME" ]; then
+                if [ -n "$COINCIDENCIA" ]; then
+                    SWITCH="cat /var/proyecto/general/exe_switch | grep $PRODUCTO_NAME | cut -d \":\" -f 2"
+
+                else
+                    SWITCH=$DEFAULT_SWITCH
+                fi
+            else
+                SWITCH=$DEFAULT_SWITCH
+            fi
+
             # Ejecutamos el archivo
             # Start-Process -FilePath C:\Users\victorav\chrome.exe -ArgumentList "/silent","/install" -PassThru -Verb runas;
-            COMMAND="Start-Process -FilePath \"C:\Users\\${USER}\\${FILE}\" -ArgumentList \"/install\",\"/silent\" -PassThru -Verb runas"
+            COMMAND="Start-Process -FilePath \"C:\Users\\${USER}\\${FILE}\" -ArgumentList $SWITCH -PassThru -Verb runas"
             RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND)
             if ! [ $? -eq 0 ]; then
-                echo "Fallo al ejecutar el archivo."
+                STR="$STR\n 1!@Fallo al instalar el archivo: $RES"
+                echo $STR
                 exit 1
             fi
         elif [ "$EXT" == "msi" ]; then
             COMMAND="msiexec.exe /i \"C:\Users\\${USER}\\${FILE}\" /qn"
             if ! [ $? -eq 0 ]; then
-                echo "Fallo al ejecutar el archivo."
+                STR="$STR\n 1!@Fallo al instalar el archivo: $RES"
+                echo $STR
                 exit 1
             fi
         fi
+
+        STR="$STR\n 0!@Archivo instalado."
 
         # Una vez instalado borramos el archivo
         COMMAND="rm \"C:\Users\\${USER}\\${FILE}\""
         RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND)
         if ! [ $? -eq 0 ]; then
-            echo "Fallo al borrar el archivo en el cliente."
+            STR="$STR\n 1!@Fallo al eliminar el archivo del cliente: $RES"
+            echo $STR
             exit 1
         fi
         # Por ultimo lo borramos en el servidor
         RES=$(rm /var/www/html/uploads/${FILE})
         if ! [ $? -eq 0 ]; then
-            echo "Fallo al borrar el archivo en el servidor."
+            STR="$STR\n 1!@Fallo al eliminar el archivo del servidor: $RES"
+            echo $STR
             exit 1
         fi
     fi
+    STR="$STR\n 0!@Instalacion finalizada"
+    echo $STR
+    exit 0
     if [ $PREF_METHOD == "winrm" ]; then
         RES=$(python3 /home/victor/Documentos/GitHub/Proyecto/Web-Proyecto-Content/assets/scripts/add_soft.py $IP $USER $PASS $FILE)
         if ! [ $RES -eq 0 ]; then
-            echo "Fallo al ejecutar el instalador del archivo."
+            STR="$STR\n 1!@Fallo al instalar el archivo: $RES"
+            echo $STR
             exit 1
         fi
+        STR="$STR\n 0!@Archivo instalado"
+            echo $STR
+            exit 0
     fi
 fi
 
 if [ "$SISTEMA" != "windows" ] && [ "$SISTEMA" != "linux" ]; then
-    echo "Sistema no soportado."
+    STR="$STR\n 1!@Sistema no soportado: $SISTEMA"
+    echo $STR
     exit 1
 fi
