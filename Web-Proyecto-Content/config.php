@@ -23,16 +23,12 @@
 
     <div class="card">
         <div class="contenido">
-            <form action="index.php" method="post">
+            <form action="config.php" method="post">
                 <input type="submit" class="boton" name="descubrir" value="Descubrir nuevos equipos"/>
             </form>
 
-            <form action="index.php" method="post">
+            <form action="config.php" method="post">
                 <input type="submit" class="boton" name="test" value="Probar conexion a equipos"/>
-            </form>
-            
-            <form action="index.php" method="post">
-                <input type="submit" class="boton" name="add_del" value="Añadir/Eliminar equipos"/>
             </form>
         </div>
         
@@ -40,28 +36,13 @@
 </div>
 
 <?php
-    if (isset($_POST["dominio"])) {
-        header("Location:dominio.php");
+    if (isset($_POST["descubrir"])) {
+        header("Location:descubrir.php");
     }
     
     // TODO: Crear add_soft.php y que haga sus cositas
-    if (isset($_POST["login"])) {
-        header("Location:add_soft.php");
-    }
-
-    // TODO: Crear zabbix.php y que haga sus cositas
-    if (isset($_POST["zabbix"])) {
-        header("Location:zabbix.php");
-    }
-
-    // TODO: Crear ossec.php y que haga sus cositas
-    if (isset($_POST["ossec"])) {
-        header("Location:ossec.php");
-    }
-
-        // TODO: Crear shell.php y que haga sus cositas
-    if (isset($_POST["shell"])) {
-        header("Location:shell.php");
+    if (isset($_POST["test"])) {
+        header("Location:test.php");
     }
 ?>
 </body>
