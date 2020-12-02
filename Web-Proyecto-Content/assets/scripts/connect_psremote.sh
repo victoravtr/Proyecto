@@ -9,7 +9,7 @@ PASS=$3
 sshpass -p$PASS ssh -o StrictHostKeyChecking=no $USER@$IP "Enter-PSSession -ComputerName localhost"
 if [ $? -eq 0 ]; then
     echo true
-    return
+    exit 0
 fi
 echo false
-return
+exit 1
