@@ -41,6 +41,10 @@ if (empty($usuario)) {
                     <input type="submit" class="boton" name="rshell" value="Abrir shell remota a equipo" />
                 </form>
 
+                <form action="index.php" method="post">
+                    <input type="submit" class="boton" name="wazuh" value="Añadir agente wazuh en equipo" />
+                </form>
+
             </div>
 
         </div>
@@ -55,14 +59,18 @@ if (empty($usuario)) {
         header("Location:add_soft.php");
     }
 
-    // TODO: Crear zabbix.php y que haga sus cositas
     if (isset($_POST["zabbix"])) {
         header("Location:zabbix.php");
     }
 
-    // TODO: Crear operar.php y que haga sus cositas
+    // TODO: Crear rshell.php y que haga sus cositas
     if (isset($_POST["rshell"])) {
         header("Location:rshell.php");
+    }
+
+    // TODO: Crear wazuh.php y que haga sus cositas
+    if (isset($_POST["wazuh"])) {
+        header("Location:wazuh.php");
     }
     ?>
 </body>
