@@ -17,6 +17,67 @@ if (empty($usuario)) {
 
 <body>
 
+    <?php
+    if (isset($_POST['domain'])) {
+        $error = false;
+        $res = array();
+
+        $cli_ip = trim($_POST['cli_ip']);
+        $cli_user = trim($_POST['cli_usuario']);
+        $cli_password = trim($_POST['cli_password']);
+
+        $dom_ip = trim($_POST['dom_ip']);
+        $dom_user = trim($_POST['dom_usuario']);
+        $dom_password = trim($_POST['dom_password']);
+        $dom_name = trim($_POST['dom_name']);
+
+        # Comprobamos las variables
+        if (empty($cli_ip)) {
+            $error = true;
+            array_push($res, "1!@No has introducido la IP del cliente.");
+        }
+        if (empty($cli_user)) {
+            $error = true;
+            array_push($res, "1!@No has introducido el usuario del cliente.");
+        }
+        if (empty($cli_password)) {
+            $error = true;
+            array_push($res, "1!@No has introducido la password del cliente.");
+        }
+
+        if (empty($dom_ip)) {
+            $error = true;
+            array_push($res, "1!@No has introducido la IP del dominio.");
+        }
+        if (empty($dom_user)) {
+            $error = true;
+            array_push($res, "1!@No has introducido el usuario del dominio.");
+        }
+        if (empty($dom_password)) {
+            $error = true;
+            array_push($res, "1!@No has introducido la password del dominio.");
+        }
+        if (empty($dom_name)) {
+            $error = true;
+            array_push($res, "1!@No has introducido el nombre del dominio.");
+        }
+
+        if (!$error) {
+            array_push($res, "0!@Datos del formulario validados.");
+            # Ejecutamos el script para incluir en el dominio
+            $out = shell_exec("./assets/scripts/dominio.sh $cli_ip $cli_user '$cli_password' $dom_ip $dom_user '$dom_password' $dom_name");
+            $piezas = explode('\n', $out);
+            foreach ($piezas as $pieza) {
+                if (!empty($pieza)) {
+                    array_push($res, $pieza);
+                }
+            }
+        } else {
+            array_push($res, "1!@Ha ocurrido un error al tratar los datos del formulario.");
+        }
+    }
+
+    ?>
     <a class="config" href="index.php">Volver </a>
     <a class="cerrar" href="logout.php">Cerrar sesión</a>
 
@@ -42,6 +103,19 @@ if (empty($usuario)) {
                         </div>
                         <div class="right-col">
                             <h2>Output: </h2>
+                            <?php
+                            if (!empty($res)) {
+                                foreach ($res as $linea) {
+                                    $linea = explode('!@', $linea);
+                                    if ($linea[0] == "0") {
+                                        echo "<p class=\"verde\">$linea[1]</p>";
+                                    } else {
+                                        echo "<p class=\"rojo\">$linea[1]</p>";
+                                    }
+                                    echo "<hr></hr>";
+                                }
+                            }
+                            ?>
                         </div>
                     </div>
                     <div class="bottom-col">
@@ -51,61 +125,6 @@ if (empty($usuario)) {
             </div>
         </div>
     </div>
-
-    <?php
-    if (isset($_POST['domain'])) {
-        $error = false;
-        $cadena_errores = "Error al procesar los datos del formulario:";
-
-        $cli_ip = trim($_POST['cli_ip']);
-        $cli_user = trim($_POST['cli_usuario']);
-        $cli_password = trim($_POST['cli_password']);
-
-        $dom_ip = trim($_POST['dom_ip']);
-        $dom_user = trim($_POST['dom_usuario']);
-        $dom_password = trim($_POST['dom_password']);
-        $dom_name = trim($_POST['dom_name']);
-
-        # Comprobamos las variables
-        if (empty($cli_ip)) {
-            $error = true;
-            $cadena_errores = $cadena_errores . "\\n No has introducido la IP del cliente";
-        }
-        if (empty($cli_user)) {
-            $error = true;
-            $cadena_errores = $cadena_errores . "\\n No has introducido el usuario del cliente";
-        }
-        if (empty($cli_password)) {
-            $error = true;
-            $cadena_errores = $cadena_errores . "\\n No has introducido la password del cliente";
-        }
-
-        if (empty($dom_ip)) {
-            $error = true;
-            $cadena_errores = $cadena_errores . "\\n No has introducido la IP del dominio";
-        }
-        if (empty($dom_user)) {
-            $error = true;
-            $cadena_errores = $cadena_errores . "\\n No has introducido el usuario del dominio";
-        }
-        if (empty($dom_password)) {
-            $error = true;
-            $cadena_errores = $cadena_errores . "\\n No has introducido la password del dominio";
-        }
-        if (empty($dom_name)) {
-            $error = true;
-            $cadena_errores = $cadena_errores . "\\n No has introducido el nombre de dominio";
-        }
-
-        if (!$error) {
-            # Ejecutamos el script para incluir en el dominio
-            $res = shell_exec("./assets/scripts/dominio.sh $cli_ip $cli_user '$cli_password' $dom_ip $dom_user '$dom_password' $dom_name");
-        } else {
-            echo '<script> alert("' . $cadena_errores_bd . '")</script>';
-        }
-    }
-
-    ?>
 </body>
 
 </html>
