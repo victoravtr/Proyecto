@@ -6,6 +6,7 @@ CLI_USER=$3
 CLI_PASSWORD=$4
 CLI_ARCH=$5
 
+STR=""
 SERVER_IP=$6
 
 LOCAL_SERVER_IP=$(hostname -I | sed 's/ *$//g')
@@ -16,29 +17,34 @@ URL_DESCARGA_CONFIG="http://${LOCAL_SERVER_IP}/uploads/zabbix_agentd.conf"
 # Comprobamos si ya se ha testeado la conexion
 PREF_METHOD_FILE="/etc/proyecto/general/${CLI_IP}"
 if ! [ -f "$PREF_METHOD_FILE" ]; then
-    echo "El archivo de conexion para el cliente no existe, se creara automaticamente usando http://proyecto.local/test.php "
+    STR="$STR\n 1!@El archivo de conexion para el cliente no existe, se creara automaticamente usando http://proyecto.local/test.php "
+    echo $STR
     exit 1
 fi
 PREF_METHOD=$(tail -n 1 /etc/proyecto/general/${CLI_IP} | cut -d ":" -f 2)
 if [ "$PREF_METHOD" == "false" ]; then
-    echo "Debes habilitar alguna forma de comunicacion en el cliente y ejecutar http://proyecto.local/test.php "
+    STR="$STR\n 1!@Debes habilitar alguna forma de comunicacion y ejecutar http://proyecto.local/test.php "
+    echo $STR
     exit 1
 fi
 
 # Copiamos el archivo zabbix_agentd.conf y cambiamos la IP de server
 cp /etc/proyecto/zabbix/zabbix_agentd.conf /var/www/html/uploads/zabbix_agentd.conf
 if ! [ $? -eq 0 ]; then
-    echo "Fallo al copiar el archivo en /uploads."
+    STR="$STR\n 1!@Fallo al copiar el archivo de configuracion en /uploads "
+    echo $STR
     exit 1
 fi
 sed -i "s/placeholder_server/${SERVER_IP}/" /var/www/html/uploads/zabbix_agentd.conf
 if ! [ $? -eq 0 ]; then
-    echo "Fallo al editar el archivo en zabbix_agentd.conf."
+    STR="$STR\n 1!@Fallo al editar el archivo de configuracion"
+    echo $STR
     exit 1
 fi
 sed -i "s/placeholder_hostname/${CLI_HOST}/" /var/www/html/uploads/zabbix_agentd.conf
 if ! [ $? -eq 0 ]; then
-    echo "Fallo al editar el archivo en zabbix_agentd.conf."
+    STR="$STR\n 1!@Fallo al editar el archivo de configuracion"
+    echo $STR
     exit 1
 fi
 
@@ -48,13 +54,15 @@ if [ $SISTEMA == "windows" ]; then
     if [ $CLI_ARCH == "64" ]; then
         cp /etc/proyecto/zabbix/zabbix_agentd64.exe /var/www/html/uploads/zabbix_agentd.exe
         if ! [ $? -eq 0 ]; then
-            echo "Fallo al copiar el archivo en /uploads."
+            STR="$STR\n 1!@Fallo al copiar el instalador en /uploads "
+            echo $STR
             exit 1
         fi
     else
         cp /etc/proyecto/zabbix/zabbix_agentd32.exe /var/www/html/uploads/zabbix_agentd.exe
         if ! [ $? -eq 0 ]; then
-            echo "Fallo al copiar el archivo en /uploads."
+            STR="$STR\n 1!@Fallo al copiar el instalador en /uploads "
+            echo $STR
             exit 1
         fi
     fi
@@ -66,16 +74,20 @@ if [ $SISTEMA == "windows" ]; then
         COMMAND="curl -o C:\Users\\${CLI_USER}\\zabbix_agentd.conf $URL_DESCARGA_CONFIG"
         RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
         if ! [ $? -eq 0 ]; then
-            echo "Fallo al descargar el instalador."
+            STR="$STR\n 1!@Fallo al descargar el archivo de configuracion en el cliente: $RES"
+            echo $STR
             exit 1
         fi
         COMMAND="curl -o C:\Users\\${CLI_USER}\\zabbix_agentd.exe $URL_DESCARGA_EXE"
         RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
         if ! [ $? -eq 0 ]; then
-            echo "Fallo al descargar el archivo."
+            STR="$STR\n 1!@Fallo al descargar el instalador en el cliente: $RES"
+            echo $STR
             exit 1
         fi
-
+        STR="$STR\n 0!@Archivos descargados en el cliente."
+        echo $STR
+        exit 1
         # Si ya hay un servicio de zabbix el instalador fallara, lo borramos antes de ejecutar el instalador
         # sc delete "zabbix agent"
         COMMAND="sc.exe delete \"Zabbix agent\""
@@ -85,23 +97,30 @@ if [ $SISTEMA == "windows" ]; then
         COMMAND="C:\Users\\${CLI_USER}\\zabbix_agentd.exe  --config C:\Users\\${CLI_USER}\\zabbix_agentd.conf --install"
         RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
         if ! [ $? -eq 0 ]; then
-            echo "Fallo al ejecutar el archivo."
+            STR="$STR\n 1!@Fallo al ejecutar el instalador: $RES"
+            echo $STR
             exit 1
         fi
-
+        STR="$STR\n 0!@Agente instalado."
         # Editamos el servicio para que se inicie automaticamente
         COMMAND="Set-Service \"Zabbix Agent\" -startuptype automatic"
         RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
         if ! [ $? -eq 0 ]; then
-            echo "Fallo al editar el servicio."
+            STR="$STR\n 1!@DFallo al editar el servicio: $RES"
+            echo $STR
             exit 1
         fi
+        STR="$STR\n 0!@Servicio editado"
+        STR="$STR\n 0!@Agente instalado."
+        echo $STR
+        exit 0
     fi
     if [ $PREF_METHOD_CLI == "winrm" ]; then
         RES=$(python3 /home/victor/Documentos/GitHub/Proyecto/Web-Proyecto-Content/assets/scripts/zabbix.py $CLI_IP $CLI_USER $CLI_PASSWORD $DOM_IP $DOM_USER $DOM_PASSWORD $DOM_NAME)
         if ! [ $RES -eq 0 ]; then
-            echo "Fallo al ejecutar script."
-            exit
+            STR="$STR\n 0!@Fallo al ejecutar el script de instalacion: $RES"
+            echo $STR
+            exit 0
         fi
     fi
 fi
@@ -112,22 +131,24 @@ if [ $SISTEMA == "linux" ]; then
         COMMAND="lsb_release -i -s | tr -dc '[:print:]'"
         SISTEMA_OPERATIVO=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
         if ! [ $? -eq 0 ]; then
-            echo "Fallo al descargar el instalador."
+            STR="$STR\n 1!@Fallo al comprobar la arquitectura del sistema"
+            echo $STR
             exit 1
         fi
-        echo $SISTEMA_OPERATIVO
         if [ "$SISTEMA_OPERATIVO" == "Ubuntu" ]; then
             COMMAND="lsb_release -sc | tr -dc '[:print:]'"
             VERSION=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
             if ! [ $? -eq 0 ]; then
-                echo "No se ha podido obtener la version del sistema operativo."
+                STR="$STR\n 1!@Fallo al comprobar la arquitectura del sistema"
+                echo $STR
                 exit 1
             fi
 
             COMMAND="wget https://repo.zabbix.com/zabbix/5.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_5.0-1+${VERSION}_all.deb"
             RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
             if ! [ $? -eq 0 ]; then
-                echo "Fallo al descargar el instalador."
+                STR="$STR\n 1!@Fallo al descargar el instalador: $RES"
+                echo $STR
                 exit 1
             fi
 
@@ -136,60 +157,71 @@ if [ $SISTEMA == "linux" ]; then
             COMMAND="export DEBIAN_FRONTEND=noninteractive && dpkg -i zabbix-release_5.0-1+${VERSION}_all.deb && export DEBIAN_FRONTEND="
             RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
             if ! [ $? -eq 0 ]; then
-                echo "Fallo al ejecutar el instalador."
+                STR="$STR\n 1!@Fallo al ejecutar el instalador: $RES"
+                echo $STR
                 exit 1
             fi
             COMMAND="apt update"
             RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
             if ! [ $? -eq 0 ]; then
-                echo "Fallo al realizar update."
+                STR="$STR\n 1!@Fallo al realizar update: $RES"
+                echo $STR
                 exit 1
             fi
 
             COMMAND="apt -y install zabbix-agent"
             RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
             if ! [ $? -eq 0 ]; then
-                echo "Fallo al instalar zabbix."
+                STR="$STR\n 1!@Fallo al instalar zabbix: $RES"
+                echo $STR
                 exit 1
             fi
         elif [ "$SISTEMA_OPERATIVO" == "Debian" ]; then
             COMMAND="lsb_release -sc | tr -dc '[:print:]'"
             VERSION=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
             if ! [ $? -eq 0 ]; then
-                echo "No se ha podido obtener la version del sistema operativo."
+                STR="$STR\n 1!@Fallo al comprobar la arquitectura del sistema"
+                echo $STR
                 exit 1
             fi
 
             COMMAND="sudo wget https://repo.zabbix.com/zabbix/5.0/debian/pool/main/z/zabbix-release/zabbix-release_5.0-1+${VERSION}_all.deb"
             RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
             if ! [ $? -eq 0 ]; then
-                echo "Fallo al descargar el archivo."
+                STR="$STR\n 1!@Fallo al descargar el instalador en el cliente: $RES"
+                echo $STR
                 exit 1
             fi
 
             COMMAND="export DEBIAN_FRONTEND=noninteractive && dpkg -i zabbix-release_5.0-1+${VERSION}_all.deb && export DEBIAN_FRONTEND="
             RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
             if ! [ $? -eq 0 ]; then
-                echo "Fallo al ejecutar el instalador."
+                STR="$STR\n 1!@Fallo al ejecutar el instalador: $RES"
+                echo $STR
                 exit 1
             fi
 
             COMMAND="apt update"
             RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
             if ! [ $? -eq 0 ]; then
-                echo "Fallo al ejecutar el instalador."
+                STR="$STR\n 1!@Fallo al realizar update: $RES"
+                echo $STR
                 exit 1
             fi
 
             COMMAND="apt -y install zabbix-agent"
             RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
             if ! [ $? -eq 0 ]; then
-                echo "Fallo al ejecutar el instalador."
+                STR="$STR\n 1!@Fallo al instalar zabbix: $RES"
+                echo $STR
                 exit 1
             fi
-
+            STR="$STR\n 1!@Zabbix instalado"
+            echo $STR
+            exit 1
         else
-            echo "Sistema operativo no soportado"
+            STR="$STR\n 1!@Sistema no soportado"
+            echo $STR
             exit 1
         fi
 
@@ -197,7 +229,8 @@ if [ $SISTEMA == "linux" ]; then
         COMMAND="systemctl stop zabbix-agent"
         RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
         if ! [ $? -eq 0 ]; then
-            echo "Fallo al parar el servicio."
+            STR="$STR\n 1!@Fallo parar el servicio: $RES"
+            echo $STR
             exit 1
         fi
 
@@ -205,14 +238,16 @@ if [ $SISTEMA == "linux" ]; then
         COMMAND="sed -i \"s/Server=127.0.0.1/Server=${SERVER_IP}/\" /etc/zabbix/zabbix_agentd.conf"
         RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
         if ! [ $? -eq 0 ]; then
-            echo "Fallo al editar el archivo en zabbix_agentd.conf."
+            STR="$STR\n 1!@Fallo al editar el archivo de configuracion: $RES"
+            echo $STR
             exit 1
         fi
         COMMAND="sed -i \"s/Hostname=Zabbix server/Hostname=${CLI_HOST}/\" /etc/zabbix/zabbix_agentd.conf"
         echo $COMMAND
         RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
         if ! [ $? -eq 0 ]; then
-            echo "Fallo al editar el archivo en zabbix_agentd.conf."
+            STR="$STR\n 1!@Fallo al editar el archivo de configuracion: $RES"
+            echo $STR
             exit 1
         fi
 
@@ -220,24 +255,31 @@ if [ $SISTEMA == "linux" ]; then
         COMMAND="systemctl start zabbix-agent"
         RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
         if ! [ $? -eq 0 ]; then
-            echo "Fallo al iniciar el servicio."
+            STR="$STR\n 1!@Fallo al iniciar el servicio: $RES"
+            echo $STR
             exit 1
         fi
 
         # Un vez instalado y configurado borramos todos los archivos: el .deb y el archivo de configuracion en uploads.
         rm /var/www/html/uploads/zabbix_agentd.conf
         if ! [ $? -eq 0 ]; then
-            echo "Fallo al borrar el archivo /uploads/zabbix_agentd.conf."
+            STR="$STR\n 1!@Fallo al borrar el archivo de configuracion en el servidor"
+            echo $STR
             exit 1
         fi
         COMMAND="rm zabbix-release_5.0-1+${VERSION}_all.deb"
         RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
         if ! [ $? -eq 0 ]; then
-            echo "Fallo al borrar el archivo zabbix-release_5.0-1+${VERSION}_all.deb"
+            STR="$STR\n 1!@Fallo al borrar el instalador en el servidor: $RES"
+            echo $STR
             exit 1
         fi
+        STR="$STR\n 0!@Zabbix se ha instalado correctamente."
+        echo $STR
+        exit 0
     else
-        echo "Solo se permite esta operacion desde ssh"
+        STR="$STR\n 1!@Solo se permite esta operacion desde SSH"
+        echo $STR
         exit 1
     fi
 fi
