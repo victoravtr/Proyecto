@@ -98,7 +98,7 @@ function enviarCorreo($conexion, $correo){
     $titulo = "Solicitud de cambio de contraseña";
     $query = mysqli_query($conexion, "SELECT codigo FROM RESET_PASS WHERE correo = '$correo'");
     $codigo = mysqli_fetch_row($query)[0];
-    $enlace = "http://localhost/proyecto/test.php?code=".$codigo;
+    $enlace = "http://proyecto.local/contra.php?code=".$codigo;
     $mensaje = "Se ha solicitado un cambio de contraseña para esta direccion de correo electronico.\n
                             Sigue el siguiente enlace para realizar el cambio: $enlace \n
                             Si no has sido tu puedes ignorar este mensaje.";
