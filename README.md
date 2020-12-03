@@ -14,8 +14,19 @@
 - Del 30 al 4 de Diciembre = testeo y correccion de errores
 - Del 5 al 6 de Diciembre = preparacion de documentacion
 - Del 7 al 8 de Diciembre = documentacion proyecto y grabacion + edicion de video presentacion
+###  Hardware Usado
+- Servidor Debian 2GB Ram
+- 1 CPU
+- 50GB HDD
+
+### Software usado
+- Todo opensource asi que F
+- VSCode para el desarrollo
+- Librerias varias
 
 #### TO-DO LIST
+- [ ] Revisar si habria que darle permisos de sudo a www-data para ejecutar los scripts de /etc/proyecto
+- [ ] Meter apartado "utilidades" en instalador donde ponga todas estas cosas random
 - [ ] Meter npm en instalador y forever tambien y sendmail para los correos
 - [ ] Hacer una tabla para la documentacion en que aparezca cada sistema operativo en el que se ha probado y si la prueba ha sido satisfactoria o no
 - [ ] Meter en instalador todas las carpetas que hay que crear y 
@@ -26,9 +37,6 @@
 - [ ] Cronjob para borrar cada X horas el contenido de /uploads
 - [ ] Meter nmap en instalador
 - [ ] Cambiar todas las rutas relativas a rutas absolutas
-- [ ] Para comprobar si PSRemoting esta habilitado tenemos que conectarnos por ssh, descargarnos un script y ejecutarlo
-- [ ] En los scripts de conexion devolver "codigo_error;motivo_de_error" en vez de solo el codigo
-- [ ] Al final no tiramos de psexec, la version para linux da problemas al instalarla y es muy antigua
 - [ ] Meter winrm en el instalador
   - [ ] Necesita python y pip de primeras
 - [ ] Pasos para meter equipo en dominio:
@@ -40,7 +48,7 @@
   - [ ] Mostrar mensaje indicativo de que se ha realizado la union pero y que pueden iniciar sesion ya en el equipo
   - [ ] Preparar plantilla de cambios que se pueden hacer de primeras por GPO, rollo mantener el ssh y cosas asi
 - [ ] En documentacion meter apartado con descripcion de ssh, winrm, etc, etc con pros y contras
-- [ ] Ya que vamos a hacer cositas con ssh, mirar si se pueden meter en los equipos fail2ban
+- [ ] Ya que vamos a hacer cositas con ssh, mirar si se pueden meter en los equipos fail2ban ESTO INCLUIRLO COMO SUGERENCIA EN MEJORAS
 - [ ] Desplegar .exe e instalarlos en otros equipos de forma automatica
 - [ ] Instalar agente zabbix, sin proxy de primeras, y alienvault y configurarlo
 - [ ] Opcion para administrar equipos de fuera del dominio
@@ -66,7 +74,6 @@
   - [ ] FLUSH PRIVILEGES;
     
 - [ ] Buscar forma de almacenar .conf de forma segura, rollo encriptar password, pero no es prioridad
-- [ ] Comprobar con el metodo que me dio Carlos de $? que los comandos se ejecutan bien
 - [ ] Cmbiar url script instalacion por las url de mi propia web o las del repositorio de github directamente
   - [ ] Dar la opcion de instalar o no la documentacion, indicando que esta en mi web y en github pero puede
         no estar disponible siempre
