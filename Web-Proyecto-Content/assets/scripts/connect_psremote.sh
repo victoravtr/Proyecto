@@ -6,7 +6,8 @@ USER=$2
 PASS=$3
 
 # Comprobamos si el equipo es accesible por ssh
-sshpass -p$PASS ssh -o StrictHostKeyChecking=no $USER@$IP "Enter-PSSession -ComputerName localhost"
+COMMAND="Enter-PSSession -ComputerName localhost"
+sshpass -p$PASS ssh -o StrictHostKeyChecking=no $USER@$IP $COMMAND
 if [ $? -eq 0 ]; then
     echo true
     exit 0
