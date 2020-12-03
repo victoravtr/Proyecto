@@ -12,7 +12,7 @@ if (empty($usuario)) {
 <head>
     <meta charset="UTF-8">
     <title>Wazuh</title>
-    <link rel="stylesheet" href="assets/styles/style_domain.css">
+    <link rel="stylesheet" href="assets/styles/style_wazuh.css">
 </head>
 
 <body>
