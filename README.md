@@ -16,7 +16,7 @@
 - Del 7 al 8 de Diciembre = documentacion proyecto y grabacion + edicion de video presentacion
 
 #### TO-DO LIST
-- [ ] Meter npm en instalador y forever tambien
+- [ ] Meter npm en instalador y forever tambien y sendmail para los correos
 - [ ] Hacer una tabla para la documentacion en que aparezca cada sistema operativo en el que se ha probado y si la prueba ha sido satisfactoria o no
 - [ ] Meter en instalador todas las carpetas que hay que crear y 
 - [ ] Requisito server: minimo la edicion 2010 para poder instalar OpenSSH
