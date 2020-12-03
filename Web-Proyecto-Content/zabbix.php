@@ -12,7 +12,7 @@ if (empty($usuario)) {
 <head>
     <meta charset="UTF-8">
     <title>Zabbix</title>
-    <link rel="stylesheet" href="assets/styles/style_domain.css">
+    <link rel="stylesheet" href="assets/styles/style_zabbix.css">
 </head>
 
 <body>
@@ -96,7 +96,7 @@ if (empty($usuario)) {
                             <input type="text" name="server_ip" placeholder="IP">
                         </div>
                         <div class="right-col">
-                            <h2>Output: </h2>
+                            <h2>Output</h2>
                             <?php
                             if (!empty($res)) {
                                 foreach ($res as $linea) {
