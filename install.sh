@@ -52,17 +52,6 @@ echo -e "${Blue}Comprobando requisitos software: $Color_Off"
 
 IP=$(hostname -I | sed 's/ *$//g')
 
-# Creamos la estructura de carpetas que vamos a usar en /etc/
-echo -e "${Blue}\nComprobando carpetas en /etc/: $Color_Off"
-
-if ! [ -d "/etc/proyecto" ]; then
-    echo -e "$Red [-] Error: no existe la carpeta /etc/proyecto $Color_Off"
-    echo  -e "$Yellow  [+] Creando la carpeta /etc/proyecto $Color_Off"
-    mkdir /etc/proyecto
-fi
-echo  -e "$Yellow  [+] Creando la carpeta /etc/proyecto/general $Color_Off"
-mkdir /etc/proyecto/general
-echo -e "$Green [+] Carpetas creada $Color_Off"
 # Utilidades
 
 echo -e "${Blue}Utilidades: $Color_Off"
@@ -134,9 +123,52 @@ if ! [ -x "$(command -v sendmail)" ]; then
 fi
 echo -e "$Green [+] sendmail esta instalado $Color_Off"
 
-
-
-
+echo -e "${Blue}\nComprobando instalacion de python3: $Color_Off"
+if ! [ -x "$(command -v python3)" ]; then
+  echo -e "$Red  [-] Error: python3 no esta instalado. $Color_Off"
+  printf "$Yellow  [?] Quieres que lo instale por ti?[y/N] $Color_Off"
+  read  decision
+  if [[ "$decision" != "y" ]]; then
+    echo -e "$Red  [-] Para continuar con el instalador debes instalar python3 $Color_Off"
+    echo -e "$Red  [-] Puedes revisar como hacerlo en en http://$IP/posts/instalacion#utilidades $Color_Off"
+    exit 1
+  else
+    # Instalamos python
+    echo "$Yellow  [+] Instalando python3 $Color_Off"
+    apt install python3
+  fi
+fi
+echo -e "$Green [+] python3 esta instalado $Color_Off"
+if ! [ -x "$(command -v pip3)" ]; then
+  echo -e "$Red  [-] Error: python3-pip no esta instalado. $Color_Off"
+  printf "$Yellow  [?] Quieres que lo instale por ti?[y/N] $Color_Off"
+  read  decision
+  if [[ "$decision" != "y" ]]; then
+    echo -e "$Red  [-] Para continuar con el instalador debes instalar python3-pip $Color_Off"
+    echo -e "$Red  [-] Puedes revisar como hacerlo en en http://$IP/posts/instalacion#utilidades $Color_Off"
+    exit 1
+  else
+    # Instalamos python3-pip
+    echo "$Yellow  [+] Instalando python3 $Color_Off"
+    apt install python3-pip
+  fi
+fi
+echo -e "$Green [+] python3-pip esta instalado $Color_Off"
+if [ -z "$(pip3 list | grep pywinrm)" ]; then
+  echo -e "$Red  [-] Error: pywinrm no esta instalado. $Color_Off"
+  printf "$Yellow  [?] Quieres que lo instale por ti?[y/N] $Color_Off"
+  read  decision
+  if [[ "$decision" != "y" ]]; then
+    echo -e "$Red  [-] Para continuar con el instalador debes instalar pywinrm $Color_Off"
+    echo -e "$Red  [-] Puedes revisar como hacerlo en en http://$IP/posts/instalacion#utilidades $Color_Off"
+    exit 1
+  else
+    # Instalamos pywinrm
+    echo "$Yellow  [+] Instalando pywinrm $Color_Off"
+    pip3 install pywinrm
+  fi
+fi
+echo -e "$Green [+] pywinrm esta instalado $Color_Off"
 
 
 # LAMP
@@ -344,94 +376,85 @@ fi
 
 echo -e "$Green [+] Tablas comprobadas. $Color_Off"
 
-echo -e "${Blue}\nPuedes acceder a la documentacion desde la siguiente url: $Color_Off"
-echo -e "   ${Purple}http://documentacion.victorav.me $Color_Off"
-echo -e "${Blue}Pero debes de tener en cuenta que puede no estar siempre disponible."
-echo -e "${Blue}Por eso, es recomendable instalarla en el mismo equipo que el programa. $Color_Off"
-
-printf "$Yellow  [?] Quieres que la instale?[y/N] $Color_Off"
-read  decision
-if [[ "$decision" != "y" ]]; then
-    echo -e "$Red  [-] No se instalara la documentacion. $Color_Off"
-    echo  -e "$Yellow  [+] Si quieres instalarla en un futuro puedes ver como en http://documentacion.victorav.me/documentacion $Color_Off"
-    BLANK_SPACE="  "
-    echo ""
-    echo -e "${Purple}${BLANK_SPACE}｜￣￣￣￣￣￣￣￣￣￣￣｜"
-    echo -e "${BLANK_SPACE}｜Ｉｎｓｔａｌａｃｉｏｎ｜"
-    echo -e "${BLANK_SPACE}｜ ｆｉｎａｌｉｚａｄａ ｜"
-    echo -e "${BLANK_SPACE}｜　　　      　　　　  ｜"
-    echo -e "${BLANK_SPACE}｜　 Ｄｉｓｆｒｕｔａ　 ｜"
-    echo -e "${BLANK_SPACE}｜　　 　ｄｅｌ　　　　 ｜"
-    echo -e "${BLANK_SPACE}｜ ｐｒｏｇｒａｍａ！　 ｜"
-    echo -e "${BLANK_SPACE}｜＿＿＿＿＿＿＿＿＿＿＿｜"
-    echo -e "${BLANK_SPACE} (\__/) ||"
-    echo -e "${BLANK_SPACE} (•ㅅ•) ||"
-    echo -e "${BLANK_SPACE} / 　 づ"
-    echo ""
-    echo -e "${BLANK_SPACE} http://proyecto.local$Color_Off"
-    exit 1
-fi
-
-# Comprobamos si existe la entrada en /etc/hosts
-echo -e "${Blue}\nComprobando archivo /etc/hosts: $Color_Off"
-if [ -z "$(cat /etc/hosts | grep documentacion.local)" ]; then
-  echo -e "$Red [-] Error: no existe la entrada ' $IP  documentacion.local ' en /etc/hosts. $Color_Off "
-  echo  -e "$Yellow  [+] Creando entrada $Color_Off"
-  command echo "$IP documentacion.local" >> /etc/hosts
-fi
-
-echo -e "$Green [+] Archivo /etc/hosts comprobado $Color_Off"
-
-# Comprobamos si ya existen las carpetas en /var/www
-echo -e "${Blue}\nComprobando carpetas en /var/www/: $Color_Off"
-
-if ! [ -d "/var/www/doc-proyecto" ]; then
-    echo -e "$Red [-] Error: no existe la carpeta /var/www/doc-proyecto $Color_Off"
-    echo  -e "$Yellow  [+] Creando la carpeta /var/www/doc-proyecto $Color_Off"
-    mkdir /var/www/doc-proyecto
-fi
-echo -e "$Green [+] Carpeta /var/www/doc-proyecto creada $Color_Off"
-
-# Comprobamos si las carpetas estan vacias
-# Si lo estan copiamos los archivos en ellas
-
-echo -e "${Blue}\nComprobando contenido de las carpetas: $Color_Off"
-if [ -z "$(ls -A /var/www/doc-proyecto)" ]; then
-  # Copiamos el contenido de Web-Proyecto-Content/ en /var/www/proyecto
-  echo -e "$Red [-] Error: la carpeta /var/www/doc-proyecto esta vacia. $Color_Off"
-  echo  -e "$Yellow  [+] Copiando contenido en /var/www/doc-proyecto $Color_Off"
-  cp -r Documentacion-Proyecto-Content/ /var/www/doc-proyecto/
-fi
-
-
-# Comprobamos si ya se han copiado los archivos de configuracion en el directorio /etc/apache2/sites-available
-echo -e "${Blue}\nComprobando archivos de configuracion de apache2: $Color_Off"
-
-if ! [ -a "/etc/apache2/sites-available/documentacion.conf" ]; then
-  echo -e "$Red [-] Error: no existe el archivo proyecto.conf en /etc/apache2/sites-available. $Color_Off "
-  echo  -e "$Yellow  [+] Copiando archivo $Color_Off"
-  cp files/apache/documentacion.conf /etc/apache2/sites-available/documentacion.conf
-  # Activamos el sitio
-  # Al usar a2ensite desde fuera de sites-available falla, hacemos cd a la carpeta y volvemos
-  echo  -e "$Yellow  [+] Activando sitio $Color_Off"
-  cd /etc/apache2/sites-available/
-  a2ensite documentacion.conf
-  systemctl reload apache2
-  cd $INSTALL_DIR
-fi
-
-echo -e "$Green [+] Sitio creado $Color_Off"
-
+# Comprobamos si HUgo esta instalado
 echo -e "${Blue}\nComprobando instalacion de Hugo: $Color_Off"
 if ! [ -x "$(command -v hugo)" ]; then
   echo -e "$Red [-] Error: hugo no esta instalado. $Color_Off"
-  echo  -e "$Yellow  [+] Instalando Hugo $Color_Off"
-  apt install hugo
+else
+  echo -e "$Green [+] Hugo instalado $Color_Off"
 fi
+echo  -e "$Yellow  [+] La instalacion de Hugo es necesaria solo si quieres tener acceso a la documentacion de forma local $Color_Off"
+echo  -e "$Yellow  [+] Dirigete a http://victoravtr.github.io/hugo para ver como $Color_Off"
 
-echo -e "$Green [+] Hugo instalado $Color_Off"
-echo  -e "$Yellow  [+] La instalacion de Hugo es necesaria solo si quieres realizar algun cambio en la documentacion $Color_Off"
-echo  -e "$Yellow  [+] Dirigete a http://documentacion.local/hugo para ver como $Color_Off"
+# Por ultimo, comprobamos que toda la estructura de carpetas en /etc/ y sus archivos se han creado bien
+# proyecto/mysql
+# 
+echo -e "${Blue}\nComprobando carpetas en /etc/: $Color_Off"
+if ! [ -d "/etc/proyecto" ]; then
+    echo -e "$Red [-] Error: no existe la carpeta /etc/proyecto $Color_Off"
+    echo  -e "$Yellow  [+] Creando la carpeta /etc/proyecto $Color_Off"
+    mkdir /etc/proyecto
+fi
+echo -e "$Green [+] Carpeta /etc/proyecto creada $Color_Off"
+
+if ! [ -d "/etc/proyecto/general" ]; then
+    echo -e "$Red [-] Error: no existe la carpeta /etc/proyecto/general $Color_Off"
+    echo  -e "$Yellow  [+] Creando la carpeta /etc/proyecto/general $Color_Off"
+    mkdir /etc/proyecto/general
+fi
+echo -e "$Green [+] Carpeta /etc/proyecto/general creada $Color_Off"
+
+if ! [ -f "/etc/proyecto/general/exe_switch" ]; then
+    echo -e "$Red [-] Error: no existe el archivo exe_switch en /etc/proyecto/general $Color_Off"
+    echo  -e "$Yellow  [+] Copiando el archivo $Color_Off"
+    cp files/general/exe_switch /etc/proyecto/general/exe_switch
+fi
+echo -e "$Green [+] Archivo /etc/proyecto/general/exe_switch copiado $Color_Off"
+
+if ! [ -d "/etc/proyecto/zabbix" ]; then
+    echo -e "$Red [-] Error: no existe la carpeta /etc/proyecto/zabbix $Color_Off"
+    echo  -e "$Yellow  [+] Creando la carpeta /etc/proyecto/zabbix $Color_Off"
+    mkdir /etc/proyecto/zabbix
+fi
+echo -e "$Green [+] Carpeta /etc/proyecto/zabbix creada $Color_Off"
+
+if ! [ -f "/etc/proyecto/zabbix/zabbix_agentd.conf" ]; then
+    echo -e "$Red [-] Error: no existe el archivo zabbix_agentd.conf en /etc/proyecto/zabbix/zabbix_agentd.conf $Color_Off"
+    echo  -e "$Yellow  [+] Copiando el archivo $Color_Off"
+    cp files/zabbix/zabbix_agentd.conf /etc/proyecto/zabbix/zabbix_agentd.conf
+fi
+echo -e "$Green [+] Archivo /etc/proyecto/zabbix/zabbix_agentd.conf copiado $Color_Off"
+if ! [ -f "/etc/proyecto/zabbix/zabbix_agentd32.exe" ]; then
+    echo -e "$Red [-] Error: no existe el archivo zabbix_agentd32.exe en /etc/proyecto/zabbix/zabbix_agentd32.exe $Color_Off"
+    echo  -e "$Yellow  [+] Copiando el archivo $Color_Off"
+    cp files/zabbix/zabbix_agentd32.exe /etc/proyecto/zabbix/zabbix_agentd32.exe
+fi
+echo -e "$Green [+] Archivo /etc/proyecto/zabbix/zabbix_agentd32.exe copiado $Color_Off"
+if ! [ -f "/etc/proyecto/zabbix/zabbix_agentd64.exe" ]; then
+    echo -e "$Red [-] Error: no existe el archivo zabbix_agentd64.exe en /etc/proyecto/zabbix/zabbix_agentd64.exe $Color_Off"
+    echo  -e "$Yellow  [+] Copiando el archivo $Color_Off"
+    cp files/zabbix/zabbix_agentd64.exe /etc/proyecto/zabbix/zabbix_agentd64.exe
+fi
+echo -e "$Green [+] Archivo /etc/proyecto/zabbix/zabbix_agentd64.exe copiado $Color_Off"
+
+if ! [ -d "/etc/proyecto/mysql" ]; then
+    echo -e "$Red [-] Error: no existe la carpeta /etc/proyecto/mysql $Color_Off"
+    echo  -e "$Yellow  [+] Creando la carpeta /etc/proyecto/mysql $Color_Off"
+    mkdir /etc/proyecto/mysql
+fi
+echo -e "$Green [+] Carpeta /etc/proyecto/mysql creada $Color_Off"
+if ! [ -f "/etc/proyecto/mysql/db_config.conf" ]; then
+    echo -e "$Red [-] Error: no existe el archivo exe_switch en /etc/mysql/db_config.conf $Color_Off"
+    echo  -e "$Yellow  [+] Copiando el archivo $Color_Off"
+    cp files/mysql/db_config.conf /etc/proyecto/mysql/db_config.conf
+fi
+echo -e "$Green [+] Archivo /etc/proyecto/mysql/init_db.sql copiado $Color_Off"
+if ! [ -f "/etc/proyecto/mysql/init_db.sql" ]; then
+    echo -e "$Red [-] Error: no existe el archivo exe_switch en /etc/mysql/init_db.sql $Color_Off"
+    echo  -e "$Yellow  [+] Copiando el archivo $Color_Off"
+    cp files/mysql/init_db.sql /etc/proyecto/mysql/init_db.sql
+fi
+echo -e "$Green [+] Archivo /etc/proyecto/mysql/init_db.sql copiado $Color_Off"
 
 BLANK_SPACE="  "
 echo ""
@@ -447,5 +470,4 @@ echo -e "${BLANK_SPACE} (\__/) ||"
 echo -e "${BLANK_SPACE} (•ㅅ•) ||"
 echo -e "${BLANK_SPACE} / 　 づ"
 echo ""
-echo -e "${BLANK_SPACE} http://documentacion.local"
 echo -e "${BLANK_SPACE} http://proyecto.local$Color_Off"
