@@ -116,7 +116,7 @@ if [ $SISTEMA == "windows" ]; then
         exit 0
     fi
     if [ $PREF_METHOD_CLI == "winrm" ]; then
-        RES=$(python3 /home/victor/Documentos/GitHub/Proyecto/Web-Proyecto-Content/assets/scripts/zabbix.py $CLI_IP $CLI_USER $CLI_PASSWORD $DOM_IP $DOM_USER $DOM_PASSWORD $DOM_NAME)
+        RES=$(python3 /var/www/proyecto/assets/scripts/zabbix.py $CLI_IP $CLI_USER $CLI_PASSWORD $DOM_IP $DOM_USER $DOM_PASSWORD $DOM_NAME)
         if ! [ $RES -eq 0 ]; then
             STR="$STR\n 0!@Fallo al ejecutar el script de instalacion: $RES"
             echo $STR
