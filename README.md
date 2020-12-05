@@ -30,36 +30,20 @@
 
 ### Documentacion
 - [ ] Hacer una tabla para la documentacion en que aparezca cada sistema operativo en el que se ha probado y si la prueba ha sido satisfactoria o no
+- [ ] Meter  aviso de que algunos programas no funcionan. Chrome por ejemplo falla porque el instalador primero descargar el programa y despues lo instala el mismo
+- [ ] Hacer apartado de troubleshoting en documentacion para los fallos que puede haber y como solucionarlos. Aqui iran las cosas del estilo:
+      - [ ] Editar php.ini para meter mas upload_max_filesize y post_max_size
+      - [ ] Meter en documentacion y script de instalacion que si el programa no funciona habria que descomentar la linea de extension=mysql en php.ini
+- [ ] meter apartado con descripcion de ssh, winrm, etc, etc con pros y contras
+
+### Posibles mejoras version 2.0
+- [ ] Uso de algun framework como angular 
+- [ ] Ya que vamos a hacer cositas con ssh, mirar si se pueden meter en los equipos fail2ban
 
 #### TO-DO LIST
-- [ ] Meter en instalador todas las carpetas que hay que crear y 
-- [ ] Editar php.ini para meter mas upload_max_filesize y post_max_size
-- [ ] Meter en add_soft lista de programas tipicos para instalar y hacer scripts personalizados
-  - [ ] Meter tambien aviso de que algunos programas no funcionan. Chrome por ejemplo falla porque el instalador primero descargar el programa y despues lo instala el mismo
-- [ ] Cronjob para borrar cada X horas el contenido de /uploads
-- [ ] Meter nmap en instalador
-- [ ] Cambiar todas las rutas relativas a rutas absolutas
-- [ ] Meter winrm en el instalador
-  - [ ] Necesita python y pip de primeras
-- [ ] Pasos para meter equipo en dominio:
-  - [ ] Buscar si en el dominio hay una entrada en los DNS (?)
-  - [ ] Cambiar DNS equipo por los del dominio, IP tambien si fuese necesario
-  - [ ] Incluir equipo en dominio
-  - [ ] Reiniciar
-  - [ ] Comprobar que se ha metido bien al dominio iniciando sesion en el propio equipo y luego por ssh
-  - [ ] Mostrar mensaje indicativo de que se ha realizado la union pero y que pueden iniciar sesion ya en el equipo
-  - [ ] Preparar plantilla de cambios que se pueden hacer de primeras por GPO, rollo mantener el ssh y cosas asi
-- [ ] En documentacion meter apartado con descripcion de ssh, winrm, etc, etc con pros y contras
-- [ ] Ya que vamos a hacer cositas con ssh, mirar si se pueden meter en los equipos fail2ban ESTO INCLUIRLO COMO SUGERENCIA EN MEJORAS
-- [ ] Desplegar .exe e instalarlos en otros equipos de forma automatica
-- [ ] Instalar agente zabbix, sin proxy de primeras, y alienvault y configurarlo
-- [ ] Opcion para administrar equipos de fuera del dominio
 - [ ] Meter sshpass en la instalacion
-- [ ] Meter en documentacion y script de instalacion que si el programa no funciona habria que descomentar la linea de extension=mysql en php.ini
 - [ ] Con hugo -D podemos crear una copia estatica de la documentacion por lo que no necesita el serve continuamente
   - [ ] Revisar como generarla bien, por algun motivo falla
-  - [ ] Indicar en el instalador y en la documentacion que si se quiere hacer cualquier cambio como hacerlo
-  - [ ] Indicar en la documentacion y en el instalador una referencia a la documentacion de hugo
 - [ ] Generar doc de timeline de los repositorios de github para la documentacion
 - [ ] Instalacion mysql
   - [ ] apt install mariadb-server
