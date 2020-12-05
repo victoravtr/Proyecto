@@ -1,3 +1,11 @@
+<!-- Este .php permite instalar software en equipos de forma remota. 
+
+Funcionamiento:
+1. Se validan los datos del formulario
+2. Si todo ha salido bien se sube el archivo al servidor. 
+3. Una vez el archivo haya sido subido, se ejcuta el script que nos permite realizar la instacion. 
+4. Se recoge la salida de ese script y se muestra al usuario el resultado. -->
+
 <?php
 session_start();
 $usuario = $_SESSION["usuario"];
@@ -18,10 +26,11 @@ if (empty($usuario)) {
 <body>
     <?php
     if (isset($_POST["add_soft"])) {
-        # Lista de extensiones permitidas: .exe .msi [para windows]  .deb [para linux]
+        # Lista de extensiones permitidas: .exe .msi [para windows]  .deb .rpm [para linux]
         $ALLOWED_EXTENSIONS = ["exe", "msi", "deb", "rpm"];
         $error = false;
         $res = array();
+        
         # Comprobar que ningun campo esta vacio
         $ip = trim($_POST["ip"]);
         $usuario = trim($_POST["usuario"]);
