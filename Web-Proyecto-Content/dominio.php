@@ -20,8 +20,11 @@ if (empty($usuario)) {
     <?php
     if (isset($_POST['domain'])) {
         $error = false;
+
+        # Array con los outputs del programa
         $res = array();
 
+        # Validamos las variables del formulario
         $cli_ip = trim($_POST['cli_ip']);
         $cli_user = trim($_POST['cli_usuario']);
         $cli_password = trim($_POST['cli_password']);
@@ -31,7 +34,6 @@ if (empty($usuario)) {
         $dom_password = trim($_POST['dom_password']);
         $dom_name = trim($_POST['dom_name']);
 
-        # Comprobamos las variables
         if (empty($cli_ip)) {
             $error = true;
             array_push($res, "1!@No has introducido la IP del cliente.");
