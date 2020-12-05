@@ -1,5 +1,0 @@
-# Nmap 7.80 scan initiated Wed Dec  2 19:32:01 2020 as: nmap -sP -oG log.txt 192.168.10.0/24
-Host: 192.168.10.2 ()	Status: Up
-Host: 192.168.10.12 ()	Status: Up
-Host: 192.168.10.67 (proyecto.local)	Status: Up
-# Nmap done at Wed Dec  2 19:32:16 2020 -- 256 IP addresses (3 hosts up) scanned in 15.41 seconds
