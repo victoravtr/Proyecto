@@ -93,9 +93,7 @@ if (isset($_POST["login"])) {
 	} else {
 		echo '<script> alert("'.$cadena_errores.'")</script>';
 	}
-	// FALTA DEJAR BONITOS LOS ECHO DE CUANDO SE CREAN LOS USUARIOS Y CAMBIAR LA PASS POR UN HASH
-	// REVISAR ADEMAS TODOS LOS MENSAJES DE ERROR
-	
+
 }
 ?>
 
