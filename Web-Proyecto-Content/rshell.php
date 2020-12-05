@@ -38,7 +38,8 @@ if (empty($usuario)) {
     if (isset($_POST["rshell"])) {
         $error = false;
         $cadena_errores = "Error al procesar los datos del formulario:";
-        # Comprobar que ningun campo esta vacio
+        
+        # Validamos los campos del formulario
         $ip = trim($_POST["ip"]);
 
         if (empty($ip)) {
@@ -47,6 +48,7 @@ if (empty($usuario)) {
         }
 
         if (!$error) {
+            # Una vez validados, se dirige al usuario a la siguiente URL donde se abrira una web shell.
             header("Location:http://proyecto.local:2222/ssh/host/$ip");
         } else {
             echo '<script> alert("' . $cadena_errores_bd . '")</script>';
