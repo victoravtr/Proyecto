@@ -1,4 +1,5 @@
 <?php
+# Redirige al usuario al login para cerrar la sesion
 session_start();
 echo '<script> alert("Sesion finalizada")</script>';
 session_destroy();
