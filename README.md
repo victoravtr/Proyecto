@@ -18,19 +18,21 @@
 - Servidor Debian 2GB Ram
 - 1 CPU
 - 50GB HDD
+- Requisito controlador de dominio: minimo la edicion 2010 para poder instalar OpenSSH
 
 ### Software usado
 - Todo opensource asi que F
 - VSCode para el desarrollo
 - Librerias varias
 
-#### TO-DO LIST
+### Testeo
 - [ ] Revisar si habria que darle permisos de sudo a www-data para ejecutar los scripts de /etc/proyecto
-- [ ] Meter apartado "utilidades" en instalador donde ponga todas estas cosas random
-- [ ] Meter npm en instalador y forever tambien y sendmail para los correos
+
+### Documentacion
 - [ ] Hacer una tabla para la documentacion en que aparezca cada sistema operativo en el que se ha probado y si la prueba ha sido satisfactoria o no
+
+#### TO-DO LIST
 - [ ] Meter en instalador todas las carpetas que hay que crear y 
-- [ ] Requisito server: minimo la edicion 2010 para poder instalar OpenSSH
 - [ ] Editar php.ini para meter mas upload_max_filesize y post_max_size
 - [ ] Meter en add_soft lista de programas tipicos para instalar y hacer scripts personalizados
   - [ ] Meter tambien aviso de que algunos programas no funcionan. Chrome por ejemplo falla porque el instalador primero descargar el programa y despues lo instala el mismo
@@ -94,4 +96,3 @@
     - [ ] MySQL
     - [ ] Apache2
     - [ ] PHP
-  - [ ] Quitar las funciones de php que crean las tablas de la base de datos y meterlas en un .sql
