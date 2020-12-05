@@ -27,5 +27,7 @@ try:
     #Editamos el servicio para que se inicie de forma automatica
     COMMAND="Set-Service \"Zabbix Agent\" -startuptype automatic"
     session.run(COMMAND)
+
+    print("0")
 except Exception as e:
-    print(e)
+    print("1")
