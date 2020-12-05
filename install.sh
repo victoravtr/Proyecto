@@ -52,6 +52,93 @@ echo -e "${Blue}Comprobando requisitos software: $Color_Off"
 
 IP=$(hostname -I | sed 's/ *$//g')
 
+# Creamos la estructura de carpetas que vamos a usar en /etc/
+echo -e "${Blue}\nComprobando carpetas en /etc/: $Color_Off"
+
+if ! [ -d "/etc/proyecto" ]; then
+    echo -e "$Red [-] Error: no existe la carpeta /etc/proyecto $Color_Off"
+    echo  -e "$Yellow  [+] Creando la carpeta /etc/proyecto $Color_Off"
+    mkdir /etc/proyecto
+fi
+echo  -e "$Yellow  [+] Creando la carpeta /etc/proyecto/general $Color_Off"
+mkdir /etc/proyecto/general
+echo -e "$Green [+] Carpetas creada $Color_Off"
+# Utilidades
+
+echo -e "${Blue}Utilidades: $Color_Off"
+echo -e "${Blue}\nComprobando instalacion de nodejs: $Color_Off"
+if ! [ -x "$(command -v nodejs)" ]; then
+  echo -e "$Red  [-] Error: nodsjs no esta instalado. $Color_Off"
+  printf "$Yellow  [?] Quieres que lo instale por ti?[y/N] $Color_Off"
+  read  decision
+  if [[ "$decision" != "y" ]]; then
+    echo -e "$Red  [-] Para continuar con el instalador debes instalar nodejs $Color_Off"
+    echo -e "$Red  [-] Puedes revisar como hacerlo en en http://$IP/posts/instalacion#utilidades $Color_Off"
+    exit 1
+  else
+    # Instalamos nodejs
+    echo "$Yellow  [+] Instalando nodejs $Color_Off"
+    apt install nodejs
+  fi
+fi
+echo -e "$Green [+] nodejs esta instalado $Color_Off"
+
+echo -e "${Blue}\nComprobando instalacion de npm: $Color_Off"
+if ! [ -x "$(command -v npm)" ]; then
+  echo -e "$Red  [-] Error: npm no esta instalado. $Color_Off"
+  printf "$Yellow  [?] Quieres que lo instale por ti?[y/N] $Color_Off"
+  read  decision
+  if [[ "$decision" != "y" ]]; then
+    echo -e "$Red  [-] Para continuar con el instalador debes instalar npm $Color_Off"
+    echo -e "$Red  [-] Puedes revisar como hacerlo en en http://$IP/posts/instalacion#utilidades $Color_Off"
+    exit 1
+  else
+    # Instalamos npm
+    echo "$Yellow  [+] Instalando npm $Color_Off"
+    apt install npm
+  fi
+fi
+echo -e "$Green [+] npm esta instalado $Color_Off"
+
+echo -e "${Blue}\nComprobando instalacion de forever: $Color_Off"
+if ! [ -x "$(command -v forever)" ]; then
+  echo -e "$Red  [-] Error: forever no esta instalado. $Color_Off"
+  printf "$Yellow  [?] Quieres que lo instale por ti?[y/N] $Color_Off"
+  read  decision
+  if [[ "$decision" != "y" ]]; then
+    echo -e "$Red  [-] Para continuar con el instalador debes instalar forever $Color_Off"
+    echo -e "$Red  [-] Puedes revisar como hacerlo en en http://$IP/posts/instalacion#utilidades $Color_Off"
+    exit 1
+  else
+    # Instalamos forever
+    echo "$Yellow  [+] Instalando forever $Color_Off"
+    sudo npm install forever
+  fi
+fi
+echo -e "$Green [+] forever esta instalado $Color_Off"
+
+echo -e "${Blue}\nComprobando instalacion de sendmail: $Color_Off"
+if ! [ -x "$(command -v sendmail)" ]; then
+  echo -e "$Red  [-] Error: sendmail no esta instalado. $Color_Off"
+  printf "$Yellow  [?] Quieres que lo instale por ti?[y/N] $Color_Off"
+  read  decision
+  if [[ "$decision" != "y" ]]; then
+    echo -e "$Red  [-] Para continuar con el instalador debes instalar sendmail $Color_Off"
+    echo -e "$Red  [-] Puedes revisar como hacerlo en en http://$IP/posts/instalacion#utilidades $Color_Off"
+    exit 1
+  else
+    # Instalamos sendmail
+    echo "$Yellow  [+] Instalando sendmail $Color_Off"
+    apt install sendmail
+  fi
+fi
+echo -e "$Green [+] sendmail esta instalado $Color_Off"
+
+
+
+
+
+
 # LAMP
 
 # Comprobamos si apache2 esta instalado
@@ -93,7 +180,6 @@ if ! [ -x "$(command -v php)" ]; then
 fi
 
 echo -e "$Green [+] php esta instalado $Color_Off"
-
 
 # De primeras vamos a hacerlo todo en un proyecto.local que tenemos que meter en /etc/hosts
 # Cuando este todo montado se mirara de que el usuario pueda meter su propia url por si ya esta en un dominio por 
