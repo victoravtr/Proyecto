@@ -51,6 +51,8 @@ if (empty($usuario)) {
     </div>
 
     <?php
+
+    # Dependiendo del boton que se pulse se dirigira al usuario a una pagina u otra
     if (isset($_POST["dominio"])) {
         header("Location:dominio.php");
     }
@@ -63,12 +65,10 @@ if (empty($usuario)) {
         header("Location:zabbix.php");
     }
 
-    // TODO: Crear rshell.php y que haga sus cositas
     if (isset($_POST["rshell"])) {
         header("Location:rshell.php");
     }
 
-    // TODO: Crear wazuh.php y que haga sus cositas
     if (isset($_POST["wazuh"])) {
         header("Location:wazuh.php");
     }
