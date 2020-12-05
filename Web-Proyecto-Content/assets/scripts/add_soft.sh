@@ -8,6 +8,7 @@ SERVER_IP=$(hostname -I | sed 's/ *$//g')
 STR=""
 # Comprobar conexion con equipo
 #   Leemos archivo, comprobando antes si existe, para ver si hay un metodo preferido.
+#   Si no existe un PREF_METHOD significa que no hay ningun metodo de conexion, por lo que se termina la ejecucion del programa.
 PREF_METHOD_FILE="/etc/proyecto/general/${IP}"
 if ! [ -f $PREF_METHOD_FILE ]; then
     STR="$STR\n 1!@El archivo no existe, se creara automaticamente usando http://proyecto.local/test.php "
@@ -204,7 +205,7 @@ if [ "$SISTEMA" == "windows" ]; then
     echo $STR
     exit 0
     if [ $PREF_METHOD == "winrm" ]; then
-        RES=$(python3 /home/victor/Documentos/GitHub/Proyecto/Web-Proyecto-Content/assets/scripts/add_soft.py $IP $USER $PASS $FILE)
+        RES=$(python3 /var/www/assets/scripts/add_soft.py $IP $USER $PASS $FILE)
         if ! [ $RES -eq 0 ]; then
             STR="$STR\n 1!@Fallo al instalar el archivo: $RES"
             echo $STR
