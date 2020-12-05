@@ -6,11 +6,14 @@ error_reporting(E_ERROR);
 
 
 // conectar con la base de datos
+// Se recupera el contenido de db_config.conf y se establece
+// una conexion a la base de datos con el contenido del archivo
 function conectarBase(){
     ///////////////////////////////////////////////////
     // Dependiendo de tu instalacion de MySQL        //
     // puedes cambiar las siguientes variables en    //
-    // el archivo de configuracion config.json       //
+    // el archivo de configuracion en                //
+    // /etc/proyecto/mysql/db_config.conf            //
     ///////////////////////////////////////////////////
     $config = file("/etc/proyecto/mysql/db_config.conf");//file in to an array
 
@@ -24,7 +27,11 @@ function conectarBase(){
 }
 
 
-// comprobar si un usuario existe
+// Comprobar si un usuario existe
+// A la funcion se le pasa una conexion, un usuario y un correo
+// y por medio de varias consultas a la base de datos se comprueba
+// si ya existen registros de ese usuario y correo.
+// Devuelve true si ya existe ese usuario y correo y false si no.
 function existeUsuario($conexion, $usuario, $correo) {
 
     if ($correo == null) {
@@ -44,7 +51,12 @@ function existeUsuario($conexion, $usuario, $correo) {
     return true;
 }
 
-// comprobar si las credencuales son correctas
+// Comprobar si las credencuales son correctas
+// A la funcion se le pasa una conexion, un usuario y una contraseña,
+// se recupera la contraseña asociada al usuario y con se verifica
+// que tanto esa contraseña como la que se le pasa como parametro
+// coinciden.
+// Devuelve true si los datos concuerdan y false si no lo hacen.
 function comprobarCredenciales($conexion, $usuario, $contraseña){
     $result = mysqli_query($conexion, "SELECT pass FROM CREDENCIALES WHERE usuario = '$usuario'");
     $row = mysqli_fetch_row($result);
@@ -54,7 +66,10 @@ function comprobarCredenciales($conexion, $usuario, $contraseña){
     return false;
 }
 
-// registrar nuevo usuario
+// Registrar nuevo usuario
+// A la funcion se le pasa una conexion, un usuario, un correo y una
+// contraseña, se calcula el hash de la misma y se insertan los datos
+// en la tabla CREDENCIALES
 function registrarUsuario($conexion, $usuario, $correo, $contraseña){
 
     // primero hay que comprobar si hay algun usuario con ese nombre o contraseña
@@ -65,7 +80,11 @@ function registrarUsuario($conexion, $usuario, $correo, $contraseña){
     }
 }
 
-// comprobar si ya existe una solicitud
+// Comprobar si ya existe una solicitud
+// A la funcion se le pasa una conexion y un correo y se comprueba si ya
+// existe una entrada que corresponda con el correo que se le suministra. 
+// Devuelve false si no existe ningun registro asociado a ese correo y true
+// si hay alguno.
 function comprobarSolicitudResetPass($conexion, $correo) {
     $result = mysqli_query($conexion, "SELECT COUNT(*) FROM RESET_PASS WHERE correo = '$correo'");
     $row = mysqli_fetch_row($result);
@@ -78,7 +97,10 @@ function comprobarSolicitudResetPass($conexion, $correo) {
     
 }
 
-// registrar solicitud cambio de contraseña
+// Registrar solicitud cambio de contraseña
+// A la funcion se le pasa una conexion y un correo, comprueba si existe ya
+// una solicitud, la borra si la hay y si no la  genera.
+// Devuelve el resultado de la query de insercion.
 function registrarSolicitudResetPass($conexion, $correo) {
 
     // comprobamos si la solicitud ya existe
@@ -94,6 +116,10 @@ function registrarSolicitudResetPass($conexion, $correo) {
     return $query;
 }
 
+// Enviar correo de solicitud de cambio de contraseña
+// A la funcion se le pasa una conexion y un correo, consulta en la base de
+// datos el codigo de recuperacion asociado con el correo, genera una url
+// en base a ese codigo y envia los datos en un correo
 function enviarCorreo($conexion, $correo){
     $titulo = "Solicitud de cambio de contraseña";
     $query = mysqli_query($conexion, "SELECT codigo FROM RESET_PASS WHERE correo = '$correo'");
@@ -105,10 +131,12 @@ function enviarCorreo($conexion, $correo){
     mail($correo, $titulo, $mensaje,'From: admin@proyecto.local','-f admin@proyecto.local');
 }
 
+// Realizar un cambio de contraseña
+// A la funcion se le pasa una conexion, una contraseña y un codigo, se busca
+// el correo asociado al codigo , se genera el hash de la nueva contraseña y se actualiza
+// la base de datos con los nuevos datos. Por ultimo, se borra la solicitud de cambio de
+// contraseña asociada con ese correo.
 function cambiarPass($conexion, $pass, $codigo){
-    // Buscamos el correo asociado al codigo que le pasamos por el GET
-    // Generamor la nueva contraseña y actualizamos la base de datos
-    // Si todo ha salido bien borramos la solicitud
     $correo = mysqli_query($conexion, "SELECT correo FROM RESET_PASS WHERE codigo = '$codigo'");
     $correo = mysqli_fetch_row($correo)[0];
     
@@ -119,7 +147,10 @@ function cambiarPass($conexion, $pass, $codigo){
     return $query;
 }
 
-// Comprobamos que los codigos que se le pasan como parametro existan en la base de datos
+// Comprobar si ya existe una solicitud de cambio de contraseña 
+// A la funcion se le pasa una conexion y un codigo y comprueba que ese codigo no exista
+// en la base de datos. 
+// Se devuelve true si existe y false si no.
 function comprobarCodigo($conexion, $codigo) {
     $query = mysqli_query($conexion, "SELECT COUNT(*) FROM RESET_PASS WHERE codigo = '$codigo'");
     $row = mysqli_fetch_row($query);
@@ -127,10 +158,6 @@ function comprobarCodigo($conexion, $codigo) {
         return true;
     }
     return false;
-}
-
-function comprobarConexion() {
-
 }
 
 ?>
