@@ -39,5 +39,4 @@ try:
     print("0")
 except Exception as e:
     # Si algo sale mal el programa retorna un 1
-    print(e)
     print("1")
