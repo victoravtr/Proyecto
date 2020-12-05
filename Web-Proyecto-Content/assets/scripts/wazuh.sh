@@ -33,7 +33,7 @@ if [ "$SISTEMA" == "windows" ]; then
         fi
     fi
     if [ "$PREF_METHOD" == "winrm" ]; then
-        RES=$(python3 /home/victor/Documentos/GitHub/Proyecto/Web-Proyecto-Content/assets/scripts/wazuh.py $CLI_IP $CLI_USER $CLI_PASSWORD $SERVER_IP)
+        RES=$(python3 /var/www/proyecto/assets/scripts/wazuh.py $CLI_IP $CLI_USER $CLI_PASSWORD $SERVER_IP)
         if ! [ $RES -eq 0 ]; then
             STR="$STR\n 0!@Fallo al ejecutar el script de instalacion: $RES"
             echo $STR
