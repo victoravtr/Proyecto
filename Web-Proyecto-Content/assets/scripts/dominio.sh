@@ -54,7 +54,6 @@ fi
 
 if [ $PREF_METHOD_CLI == "ssh" ]; then
     # Copiamos el script de instalacion y lo descargamos en el equipo objetivo
-    # cp /var/www/proyecto/assets/scripts/join_domain.ps1 /var/www/html/uploads
     cp join_domain.ps1 /var/www/html/uploads/join_domain.ps1
     if ! [ $? -eq 0 ]; then
         STR="$STR\n 1!@Fallo al copiar el archivo en /uploads."
