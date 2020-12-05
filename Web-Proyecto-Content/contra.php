@@ -13,6 +13,12 @@
   <h1>¿Has olvidado tu contraseña?</h1>
 
   <?php
+  // Comprobamos si en la URL hay un codigo:
+  //   - Si no hay ningun codigo significa que el usuario va a generar una nueva solicitud.
+  //   - Si hay un codigo es que la solicitud ya ha sido generada y el usuario va a cambiar 
+  //     sus datos
+  // Dependiendo de cual sea el caso se muestran unos campos de formulario u otros.
+
     if (!isset($_GET['code'])) {
         echo '
         <div class="form__group field">
