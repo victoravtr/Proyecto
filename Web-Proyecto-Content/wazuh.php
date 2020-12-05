@@ -19,8 +19,11 @@ if (empty($usuario)) {
     <?php
     if (isset($_POST['domain'])) {
         $error = false;
+        
+        # Array que almacena los outputs del programa
         $res = array();
 
+        # Validamos los campos del formulario
         $cli_ip = trim($_POST['cli_ip']);
         $cli_host = trim($_POST['cli_host']);
         $cli_user = trim($_POST['cli_usuario']);
@@ -28,7 +31,6 @@ if (empty($usuario)) {
 
         $server_ip = trim($_POST['server_ip']);
 
-        # Comprobamos las variables
         if (empty($cli_ip)) {
             $error = true;
             array_push($res, "1!@No has introducido una IP.");
@@ -52,6 +54,8 @@ if (empty($usuario)) {
         }
 
         if (!$error) {
+            # Ejecutamos el script que nos permite instalar los agentes de wazuh, recogemos el output,
+            # lo tratamos y lo almacenamos en $res
             $out = shell_exec("./assets/scripts/wazuh.sh $cli_ip $cli_user '$cli_password' $server_ip");
             $piezas = explode('\n', $out);
             foreach ($piezas as $pieza) {
