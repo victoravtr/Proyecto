@@ -20,14 +20,17 @@ if (empty($usuario)) {
 
     if (isset($_POST['config'])) {
         $error = false;
+        # Array con todos los outputs del programa
         $res = array();
 
+        # Array con los scripts que vamos a ejecutar
         $FILE_PATH = array(
             "ssh" => "connect_ssh.sh",
             "winrm" => "connect_winrm.sh",
             "PSRemoting" => "connect_psremote.sh"
         );
 
+        # Validamos las variables del formulario
         $IP = trim($_POST['ip']);
         $USER = trim($_POST['usuario']);
         $PASS = trim($_POST['password']);
@@ -47,10 +50,18 @@ if (empty($usuario)) {
         }
 
         if (!$error) {
+            # String es la cadena de texto donde almacenaremos las variables que necesitamos para luego
+            # guardarlas en el archivo CONF_FILE. El archivo CONF_FILE sera la url base asignada a la
+            # variable + IP introducida por el usuario.
             $STRING = "";
             $CONF_FILE = "/etc/proyecto/general/";
             $PREF_METHOD = "";
             array_push($res, "0!@Datos del formulario validados.");
+
+            # Recorremos el array de archivos y los vamos ejecutando para comprobar si se
+            # puede establecer una conexion con el cliente o no.
+            # Ademas, vamos asignando el output a la variable STRING para luego guardar su contenido
+            # en el archivo CONF_FILE
             foreach ($FILE_PATH as $key => $value) {
                 $output = trim(shell_exec("./assets/scripts/$value $IP $USER '$PASS'"));
 
