@@ -98,7 +98,7 @@
 					$cadena_errores_bd = $cadena_errores_bd."\\n".mysqli_error($conexion);
 					echo '<script> alert("'.$cadena_errores_bd.'")</script>';
 				} else {
-					// comprobamos si el usuario
+					// comprobamos si el usuario existe
 					if (existeUsuario($conexion, $usuario, $correo)) {
 						$cadena_errores_bd = $cadena_errores_bd."\\n Ya existe un usuario con ese nombre o correo.";
 					} else {
