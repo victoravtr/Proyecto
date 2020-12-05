@@ -16,7 +16,9 @@ try:
     URL_DESCARGA_SERVER = "http://" + IP_SERVER + "/uploads/" + FILE
     URL_DESCARGA_CLIENT = "C:\\Users\\" + CLI_USER + "\\" + FILE
 
+    # Creamos una sesion
     session = winrm.Session(CLI_IP, auth=(CLI_USER, CLI_PASSWORD))
+    
     # Descargamos el archivo en el equipo objetivo
     COMMAND = "curl -o " + URL_DESCARGA_CLIENT + " " + URL_DESCARGA_SERVER
     session.run_ps(COMMAND)
