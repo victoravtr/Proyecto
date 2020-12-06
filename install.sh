@@ -170,6 +170,22 @@ if [ -z "$(pip3 list | grep pywinrm)" ]; then
 fi
 echo -e "$Green [+] pywinrm esta instalado $Color_Off"
 
+echo -e "${Blue}\nComprobando instalacion de sshpass: $Color_Off"
+if ! [ -x "$(command -v sshpass)" ]; then
+  echo -e "$Red  [-] Error: sshpass no esta instalado. $Color_Off"
+  printf "$Yellow  [?] Quieres que lo instale por ti?[y/N] $Color_Off"
+  read  decision
+  if [[ "$decision" != "y" ]]; then
+    echo -e "$Red  [-] Para continuar con el instalador debes instalar sshpass $Color_Off"
+    echo -e "$Red  [-] Puedes revisar como hacerlo en en http://$IP/posts/instalacion#utilidades $Color_Off"
+    exit 1
+  else
+    # Instalamos sshpass
+    echo "$Yellow  [+] Instalando sshpass $Color_Off"
+    apt install sshpass
+  fi
+fi
+echo -e "$Green [+] sshpass esta instalado $Color_Off"
 
 # LAMP
 
