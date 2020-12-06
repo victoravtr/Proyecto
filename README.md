@@ -35,31 +35,30 @@
       - [ ] Editar php.ini para meter mas upload_max_filesize y post_max_size
       - [ ] Meter en documentacion y script de instalacion que si el programa no funciona habria que descomentar la linea de extension=mysql en php.ini
 - [ ] meter apartado con descripcion de ssh, winrm, etc, etc con pros y contras
+- [ ] Con hugo -D podemos crear una copia estatica de la documentacion por lo que no necesita el serve continuamente
+- [ ] Generar doc de timeline de los repositorios de github para la documentacion
+- [ ] Instalacion mysql
+  - apt install mariadb-server
+  - ejecutamos el comando "sudo mysql_secure_installation
+    - le metemos la password de root
+    - removemos usuarios anonimos
+    - no desactivamos el acceso root anonimo
+    - quitamos las tablas de test
+    - recargamos la tabla de privilegios
+  - nos logeamos en mysql como root con "sudo mysql -u root -p"
+  - CREATE USER 'proyecto'@'%' IDENTIFIED BY 'Alisec$2018';
+  - CREATE DATABASE proyecto_db;
+  - GRANT ALL PRIVILEGES ON proyecto_db.* TO 'proyecto'@'%';
+  - FLUSH PRIVILEGES;
 
 ### Posibles mejoras version 2.0
 - [ ] Uso de algun framework como angular 
 - [ ] Ya que vamos a hacer cositas con ssh, mirar si se pueden meter en los equipos fail2ban
+- [ ] Buscar forma de almacenar .conf de forma segura, rollo encriptar password, pero no es prioridad
 
 #### TO-DO LIST
-- [ ] Meter sshpass en la instalacion
-- [ ] Con hugo -D podemos crear una copia estatica de la documentacion por lo que no necesita el serve continuamente
-  - [ ] Revisar como generarla bien, por algun motivo falla
-- [ ] Generar doc de timeline de los repositorios de github para la documentacion
-- [ ] Instalacion mysql
-  - [ ] apt install mariadb-server
-  - [ ] ejecutamos el comando "sudo mysql_secure_installation
-    - [ ] le metemos la password de root
-    - [ ] removemos usuarios anonimos
-    - [ ] no desactivamos el acceso root anonimo
-    - [ ] quitamos las tablas de test
-    - [ ] recargamos la tabla de privilegios
-  - [ ] nos logeamos en mysql como root con "sudo mysql -u root -p"
-  - [ ] CREATE USER 'proyecto'@'%' IDENTIFIED BY 'Alisec$2018';
-  - [ ] CREATE DATABASE proyecto_db;
-  - [ ] GRANT ALL PRIVILEGES ON proyecto_db.* TO 'proyecto'@'%';
-  - [ ] FLUSH PRIVILEGES;
+
     
-- [ ] Buscar forma de almacenar .conf de forma segura, rollo encriptar password, pero no es prioridad
 - [ ] Cmbiar url script instalacion por las url de mi propia web o las del repositorio de github directamente
   - [ ] Dar la opcion de instalar o no la documentacion, indicando que esta en mi web y en github pero puede
         no estar disponible siempre
