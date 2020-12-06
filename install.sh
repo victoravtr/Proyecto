@@ -399,7 +399,7 @@ echo -e "$Green [+] Conexion realizada con exito. $Color_Off"
 # Comprobamos que las tablas estan creadas. Si no lo estan cargamos el archivo /etc/proyecto/mysql/init_db.sql
 echo -e "${Blue}\nComprobando tablas de mysql: $Color_Off"
 QUERY="use ${DATABASE}; SHOW TABLES;"
-if [ -z "$(sudo mysql --defaults-group-suffix=proyecto -e $QUERY)" ]; then
+if ! [ -z "$(sudo mysql --defaults-group-suffix=proyecto -e $QUERY)" ]; then
   # Se ejecuta el .sql para
   echo -e "$Red [-] Error: la base de datos esta vacia. $Color_Off"
   echo  -e "$Yellow  [+] Creando tablas $Color_Off"
