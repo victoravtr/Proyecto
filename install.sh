@@ -66,7 +66,7 @@ if ! [ -x "$(command -v nodejs)" ]; then
     exit 1
   else
     # Instalamos nodejs
-    echo "$Yellow  [+] Instalando nodejs $Color_Off"
+    echo -e "$Yellow  [+] Instalando nodejs $Color_Off"
     apt install nodejs
   fi
 fi
@@ -83,7 +83,7 @@ if ! [ -x "$(command -v npm)" ]; then
     exit 1
   else
     # Instalamos npm
-    echo "$Yellow  [+] Instalando npm $Color_Off"
+    echo -e "$Yellow  [+] Instalando npm $Color_Off"
     apt install npm
   fi
 fi
@@ -100,7 +100,7 @@ if ! [ -x "$(command -v forever)" ]; then
     exit 1
   else
     # Instalamos forever
-    echo "$Yellow  [+] Instalando forever $Color_Off"
+    echo -e "$Yellow  [+] Instalando forever $Color_Off"
     sudo npm install forever
   fi
 fi
@@ -117,7 +117,7 @@ if ! [ -x "$(command -v sendmail)" ]; then
     exit 1
   else
     # Instalamos sendmail
-    echo "$Yellow  [+] Instalando sendmail $Color_Off"
+    echo -e"$Yellow  [+] Instalando sendmail $Color_Off"
     apt install sendmail
   fi
 fi
@@ -134,7 +134,7 @@ if ! [ -x "$(command -v python3)" ]; then
     exit 1
   else
     # Instalamos python
-    echo "$Yellow  [+] Instalando python3 $Color_Off"
+    echo -e "$Yellow  [+] Instalando python3 $Color_Off"
     apt install python3
   fi
 fi
@@ -149,7 +149,7 @@ if ! [ -x "$(command -v pip3)" ]; then
     exit 1
   else
     # Instalamos python3-pip
-    echo "$Yellow  [+] Instalando python3 $Color_Off"
+    echo -e "$Yellow  [+] Instalando python3 $Color_Off"
     apt install python3-pip
   fi
 fi
@@ -164,7 +164,7 @@ if [ -z "$(pip3 list | grep pywinrm)" ]; then
     exit 1
   else
     # Instalamos pywinrm
-    echo "$Yellow  [+] Instalando pywinrm $Color_Off"
+    echo -e "$Yellow  [+] Instalando pywinrm $Color_Off"
     pip3 install pywinrm
   fi
 fi
@@ -181,7 +181,7 @@ if ! [ -x "$(command -v sshpass)" ]; then
     exit 1
   else
     # Instalamos sshpass
-    echo "$Yellow  [+] Instalando sshpass $Color_Off"
+    echo -e "$Yellow  [+] Instalando sshpass $Color_Off"
     apt install sshpass
   fi
 fi
@@ -201,7 +201,7 @@ if ! [ -x "$(command -v apache2)" ]; then
     exit 1
   else
     # Instalamos apache2
-    echo "$Yellow  [+] Instalando apache2 $Color_Off"
+    echo -e "$Yellow  [+] Instalando apache2 $Color_Off"
     apt install apache2
   fi
 fi
@@ -221,7 +221,7 @@ if ! [ -x "$(command -v php)" ]; then
     exit 1
   else
     # Instalamos apache2
-    echo "$Yellow  [+] Instalando php $Color_Off"
+    echo -e "$Yellow  [+] Instalando php $Color_Off"
     apt install php
     apt install php-mysqli
   fi
@@ -271,7 +271,7 @@ if [ -z "$(ls -A /var/www/proyecto)" ]; then
   # Copiamos el contenido de Web-Proyecto-Content/ en /var/www/proyecto
   echo -e "$Red [-] Error: la carpeta /var/www/proyecto esta vacia. $Color_Off"
   echo  -e "$Yellow  [+] Copiando contenido en /var/www/proyecto $Color_Off"
-  cp Web-Proyecto-Content/* /var/www/proyecto/
+  cp -r Web-Proyecto-Content/* /var/www/proyecto/
 fi
 
 
@@ -384,7 +384,7 @@ echo -e "$Green [+] Conexion realizada con exito. $Color_Off"
 echo -e "${Blue}\nComprobando tablas de mysql: $Color_Off"
 QUERY="use ${DATABASE}; SHOW TABLES;"
 if [ -z "$(sudo mysql --defaults-group-suffix=proyecto -e $QUERY)" ]; then
-  # Copiamos el contenido de Web-Proyecto-Content/ en /var/www/proyecto
+  # Se ejecuta el .sql para
   echo -e "$Red [-] Error: la base de datos esta vacia. $Color_Off"
   echo  -e "$Yellow  [+] Creando tablas $Color_Off"
   mysql --defaults-group-suffix=proyecto < /etc/proyecto/mysql/init_db.sql
