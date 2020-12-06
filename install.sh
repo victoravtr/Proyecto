@@ -52,9 +52,12 @@ echo -e "${Blue}Comprobando requisitos software: $Color_Off"
 
 IP=$(hostname -I | sed 's/ *$//g')
 
+##################################################
 # Utilidades
-
+##################################################
 echo -e "${Blue}Utilidades: $Color_Off"
+
+# nodejs
 echo -e "${Blue}\nComprobando instalacion de nodejs: $Color_Off"
 if ! [ -x "$(command -v nodejs)" ]; then
   echo -e "$Red  [-] Error: nodsjs no esta instalado. $Color_Off"
@@ -72,6 +75,7 @@ if ! [ -x "$(command -v nodejs)" ]; then
 fi
 echo -e "$Green [+] nodejs esta instalado $Color_Off"
 
+# npm
 echo -e "${Blue}\nComprobando instalacion de npm: $Color_Off"
 if ! [ -x "$(command -v npm)" ]; then
   echo -e "$Red  [-] Error: npm no esta instalado. $Color_Off"
@@ -89,6 +93,7 @@ if ! [ -x "$(command -v npm)" ]; then
 fi
 echo -e "$Green [+] npm esta instalado $Color_Off"
 
+# forever
 echo -e "${Blue}\nComprobando instalacion de forever: $Color_Off"
 if ! [ -x "$(command -v forever)" ]; then
   echo -e "$Red  [-] Error: forever no esta instalado. $Color_Off"
@@ -106,6 +111,7 @@ if ! [ -x "$(command -v forever)" ]; then
 fi
 echo -e "$Green [+] forever esta instalado $Color_Off"
 
+# sendmail
 echo -e "${Blue}\nComprobando instalacion de sendmail: $Color_Off"
 if ! [ -x "$(command -v sendmail)" ]; then
   echo -e "$Red  [-] Error: sendmail no esta instalado. $Color_Off"
@@ -123,6 +129,7 @@ if ! [ -x "$(command -v sendmail)" ]; then
 fi
 echo -e "$Green [+] sendmail esta instalado $Color_Off"
 
+# python3
 echo -e "${Blue}\nComprobando instalacion de python3: $Color_Off"
 if ! [ -x "$(command -v python3)" ]; then
   echo -e "$Red  [-] Error: python3 no esta instalado. $Color_Off"
@@ -139,6 +146,8 @@ if ! [ -x "$(command -v python3)" ]; then
   fi
 fi
 echo -e "$Green [+] python3 esta instalado $Color_Off"
+
+# python3-pip
 if ! [ -x "$(command -v pip3)" ]; then
   echo -e "$Red  [-] Error: python3-pip no esta instalado. $Color_Off"
   printf "$Yellow  [?] Quieres que lo instale por ti?[y/N] $Color_Off"
@@ -154,6 +163,8 @@ if ! [ -x "$(command -v pip3)" ]; then
   fi
 fi
 echo -e "$Green [+] python3-pip esta instalado $Color_Off"
+
+# pywinrm
 if [ -z "$(pip3 list | grep pywinrm)" ]; then
   echo -e "$Red  [-] Error: pywinrm no esta instalado. $Color_Off"
   printf "$Yellow  [?] Quieres que lo instale por ti?[y/N] $Color_Off"
@@ -170,6 +181,7 @@ if [ -z "$(pip3 list | grep pywinrm)" ]; then
 fi
 echo -e "$Green [+] pywinrm esta instalado $Color_Off"
 
+#sshpass
 echo -e "${Blue}\nComprobando instalacion de sshpass: $Color_Off"
 if ! [ -x "$(command -v sshpass)" ]; then
   echo -e "$Red  [-] Error: sshpass no esta instalado. $Color_Off"
@@ -187,7 +199,9 @@ if ! [ -x "$(command -v sshpass)" ]; then
 fi
 echo -e "$Green [+] sshpass esta instalado $Color_Off"
 
-# LAMP
+##################################################
+# Apache
+##################################################
 
 # Comprobamos si apache2 esta instalado
 echo -e "${Blue}\nComprobando instalacion de apache2: $Color_Off"
@@ -208,7 +222,9 @@ fi
 
 echo -e "$Green [+] apache2 esta instalado $Color_Off"
 
-
+##################################################
+# php
+##################################################
 # Comprobamos si php esta instalado
 echo -e "${Blue}\nComprobando instalacion de php: $Color_Off"
 if ! [ -x "$(command -v php)" ]; then
