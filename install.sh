@@ -58,6 +58,24 @@ IP=$(hostname -I | sed 's/ *$//g')
 echo -e "${Blue}Utilidades: $Color_Off"
 
 # nodejs
+echo -e "${Blue}\nComprobando instalacion de openssh-server: $Color_Off"
+if ! [ -x "$(command -v ssh)" ]; then
+  echo -e "$Red  [-] Error: openssh-server no esta instalado. $Color_Off"
+  printf "$Yellow  [?] Quieres que lo instale por ti?[y/N] $Color_Off"
+  read  decision
+  if [[ "$decision" != "y" ]]; then
+    echo -e "$Red  [-] Para continuar con el instalador debes instalar openssh-server $Color_Off"
+    echo -e "$Red  [-] Puedes revisar como hacerlo en en http://$IP/posts/instalacion#utilidades $Color_Off"
+    exit 1
+  else
+    # Instalamos openssh-server
+    echo -e "$Yellow  [+] Instalando openssh-server $Color_Off"
+    apt install openssh-server
+  fi
+fi
+echo -e "$Green [+] openssh-server esta instalado $Color_Off"
+
+# nodejs
 echo -e "${Blue}\nComprobando instalacion de nodejs: $Color_Off"
 if ! [ -x "$(command -v nodejs)" ]; then
   echo -e "$Red  [-] Error: nodsjs no esta instalado. $Color_Off"
