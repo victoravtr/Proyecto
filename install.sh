@@ -106,7 +106,7 @@ if ! [ -x "$(command -v forever)" ]; then
   else
     # Instalamos forever
     echo -e "$Yellow  [+] Instalando forever $Color_Off"
-    sudo npm install forever
+    sudo npm install forever -g
   fi
 fi
 echo -e "$Green [+] forever esta instalado $Color_Off"
@@ -198,6 +198,42 @@ if ! [ -x "$(command -v sshpass)" ]; then
   fi
 fi
 echo -e "$Green [+] sshpass esta instalado $Color_Off"
+
+# git
+echo -e "${Blue}\nComprobando instalacion de git: $Color_Off"
+if ! [ -x "$(command -v git)" ]; then
+  echo -e "$Red  [-] Error: git no esta instalado. $Color_Off"
+  printf "$Yellow  [?] Quieres que lo instale por ti?[y/N] $Color_Off"
+  read  decision
+  if [[ "$decision" != "y" ]]; then
+    echo -e "$Red  [-] Para continuar con el instalador debes instalar git $Color_Off"
+    echo -e "$Red  [-] Puedes revisar como hacerlo en en http://$IP/posts/instalacion#utilidades $Color_Off"
+    exit 1
+  else
+    # Instalamos git
+    echo -e "$Yellow  [+] Instalando git $Color_Off"
+    apt install git
+  fi
+fi
+echo -e "$Green [+] git esta instalado $Color_Off"
+
+# webssh2
+
+echo -e "${Blue}\nComprobando webssh2: $Color_Off"
+if [ -z "$(ls -A /var/www/webssh2)" ]; then
+  # Clonamos el repositorio en su directorio
+  echo -e "$Red [-] Error: la carpeta /var/www/webssh2 esta vacia. $Color_Off"
+  echo  -e "$Yellow  [+] Copiando contenido en /var/www/webssh2 $Color_Off"
+  git clone https://github.com/billchurch/webssh2.git
+  cp -r webssh2/ /var/www/
+  sudo npm install /var/www/webssh2/app/ 
+  sudo forever start /var/www/webssh2/app/index.js 
+  if ! [ $? -eq 0 ]; then
+    echo -e "$Red  [-] Ha ocurrido un error al instalar webssh2 $Color_Off"
+    exit 1
+  fi
+fi
+echo -e "$Green [+] webssh2 esta instalado $Color_Off"
 
 ##################################################
 # Apache
