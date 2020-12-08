@@ -65,7 +65,7 @@ if ! [ -x "$(command -v ssh)" ]; then
   read  decision
   if [[ "$decision" != "y" ]]; then
     echo -e "$Red  [-] Para continuar con el instalador debes instalar openssh-server $Color_Off"
-    echo -e "$Red  [-] Puedes revisar como hacerlo en en http://$IP/posts/instalacion#utilidades $Color_Off"
+    echo -e "$Red  [-] Puedes revisar como hacerlo en en https://victoravtr.github.io/posts/instalacion/ $Color_Off"
     exit 1
   else
     # Instalamos openssh-server
@@ -83,7 +83,7 @@ if ! [ -x "$(command -v nodejs)" ]; then
   read  decision
   if [[ "$decision" != "y" ]]; then
     echo -e "$Red  [-] Para continuar con el instalador debes instalar nodejs $Color_Off"
-    echo -e "$Red  [-] Puedes revisar como hacerlo en en http://$IP/posts/instalacion#utilidades $Color_Off"
+    echo -e "$Red  [-] Puedes revisar como hacerlo en en https://victoravtr.github.io/posts/instalacion/ $Color_Off"
     exit 1
   else
     # Instalamos nodejs
@@ -101,7 +101,7 @@ if ! [ -x "$(command -v npm)" ]; then
   read  decision
   if [[ "$decision" != "y" ]]; then
     echo -e "$Red  [-] Para continuar con el instalador debes instalar npm $Color_Off"
-    echo -e "$Red  [-] Puedes revisar como hacerlo en en http://$IP/posts/instalacion#utilidades $Color_Off"
+    echo -e "$Red  [-] Puedes revisar como hacerlo en en https://victoravtr.github.io/posts/instalacion/ $Color_Off"
     exit 1
   else
     # Instalamos npm
@@ -119,7 +119,7 @@ if ! [ -x "$(command -v forever)" ]; then
   read  decision
   if [[ "$decision" != "y" ]]; then
     echo -e "$Red  [-] Para continuar con el instalador debes instalar forever $Color_Off"
-    echo -e "$Red  [-] Puedes revisar como hacerlo en en http://$IP/posts/instalacion#utilidades $Color_Off"
+    echo -e "$Red  [-] Puedes revisar como hacerlo en en https://victoravtr.github.io/posts/instalacion/ $Color_Off"
     exit 1
   else
     # Instalamos forever
@@ -137,7 +137,7 @@ if ! [ -x "$(command -v sendmail)" ]; then
   read  decision
   if [[ "$decision" != "y" ]]; then
     echo -e "$Red  [-] Para continuar con el instalador debes instalar sendmail $Color_Off"
-    echo -e "$Red  [-] Puedes revisar como hacerlo en en http://$IP/posts/instalacion#utilidades $Color_Off"
+    echo -e "$Red  [-] Puedes revisar como hacerlo en en https://victoravtr.github.io/posts/instalacion/ $Color_Off"
     exit 1
   else
     # Instalamos sendmail
@@ -155,7 +155,7 @@ if ! [ -x "$(command -v python3)" ]; then
   read  decision
   if [[ "$decision" != "y" ]]; then
     echo -e "$Red  [-] Para continuar con el instalador debes instalar python3 $Color_Off"
-    echo -e "$Red  [-] Puedes revisar como hacerlo en en http://$IP/posts/instalacion#utilidades $Color_Off"
+    echo -e "$Red  [-] Puedes revisar como hacerlo en en https://victoravtr.github.io/posts/instalacion/ $Color_Off"
     exit 1
   else
     # Instalamos python
@@ -172,7 +172,7 @@ if ! [ -x "$(command -v pip3)" ]; then
   read  decision
   if [[ "$decision" != "y" ]]; then
     echo -e "$Red  [-] Para continuar con el instalador debes instalar python3-pip $Color_Off"
-    echo -e "$Red  [-] Puedes revisar como hacerlo en en http://$IP/posts/instalacion#utilidades $Color_Off"
+    echo -e "$Red  [-] Puedes revisar como hacerlo en en https://victoravtr.github.io/posts/instalacion/ $Color_Off"
     exit 1
   else
     # Instalamos python3-pip
@@ -189,7 +189,7 @@ if [ -z "$(pip3 list | grep pywinrm)" ]; then
   read  decision
   if [[ "$decision" != "y" ]]; then
     echo -e "$Red  [-] Para continuar con el instalador debes instalar pywinrm $Color_Off"
-    echo -e "$Red  [-] Puedes revisar como hacerlo en en http://$IP/posts/instalacion#utilidades $Color_Off"
+    echo -e "$Red  [-] Puedes revisar como hacerlo en en https://victoravtr.github.io/posts/instalacion/ $Color_Off"
     exit 1
   else
     # Instalamos pywinrm
@@ -207,7 +207,7 @@ if ! [ -x "$(command -v sshpass)" ]; then
   read  decision
   if [[ "$decision" != "y" ]]; then
     echo -e "$Red  [-] Para continuar con el instalador debes instalar sshpass $Color_Off"
-    echo -e "$Red  [-] Puedes revisar como hacerlo en en http://$IP/posts/instalacion#utilidades $Color_Off"
+    echo -e "$Red  [-] Puedes revisar como hacerlo en en https://victoravtr.github.io/posts/instalacion/ $Color_Off"
     exit 1
   else
     # Instalamos sshpass
@@ -225,7 +225,7 @@ if ! [ -x "$(command -v git)" ]; then
   read  decision
   if [[ "$decision" != "y" ]]; then
     echo -e "$Red  [-] Para continuar con el instalador debes instalar git $Color_Off"
-    echo -e "$Red  [-] Puedes revisar como hacerlo en en http://$IP/posts/instalacion#utilidades $Color_Off"
+    echo -e "$Red  [-] Puedes revisar como hacerlo en en https://victoravtr.github.io/posts/instalacion/ $Color_Off"
     exit 1
   else
     # Instalamos git
@@ -265,7 +265,7 @@ if ! [ -x "$(command -v apache2)" ]; then
   read  decision
   if [[ "$decision" != "y" ]]; then
     echo -e "$Red  [-] Para continuar con el instalador debes instalar apache2 $Color_Off"
-    echo -e "$Red  [-] Puedes revisar como hacerlo en en http://$IP/posts/instalacion#apache2 $Color_Off"
+    echo -e "$Red  [-] Puedes revisar como hacerlo en en https://victoravtr.github.io/posts/instalacion/ $Color_Off"
     exit 1
   else
     # Instalamos apache2
@@ -287,7 +287,7 @@ if ! [ -x "$(command -v php)" ]; then
   read  decision
   if [[ "$decision" != "y" ]]; then
     echo -e "$Red  [-] Para continuar con el instalador debes instalar php $Color_Off"
-    echo -e "$Red  [-] Puedes revisar como hacerlo en en http://$IP/posts/instalacion#php $Color_Off"
+    echo -e "$Red  [-] Puedes revisar como hacerlo en en https://victoravtr.github.io/posts/instalacion/ $Color_Off"
     exit 1
   else
     # Instalamos apache2
@@ -313,7 +313,7 @@ if [ -z "$(cat /etc/hosts | grep proyecto.local)" ]; then
   read  decision
   if [[ "$decision" != "y" ]]; then
     echo -e "$Red  [-] Para continuar con el instalador debes crear la entrada en /etc/hosts $Color_Off"
-    echo -e "$Red  [-] Puedes revisar como hacerlo en en http://$IP/posts/instalacion#hosts $Color_Off"
+    echo -e "$Red  [-] Puedes revisar como hacerlo en en https://victoravtr.github.io/posts/instalacion/ $Color_Off"
     exit 1
   else
     # Creamos la entrada
@@ -354,7 +354,7 @@ if ! [ -a "/etc/apache2/sites-available/proyecto.conf" ]; then
   read  decision
   if [[ "$decision" != "y" ]]; then
     echo -e "$Red  [-] Para continuar con el instalador debes copiar el archivo /files/apache/proyecto.conf en /etc/apache2/sites-available/ $Color_Off"
-    echo -e "$Red  [-] Puedes revisar como hacerlo en en http://$IP/posts/instalacion#apache2 $Color_Off"
+    echo -e "$Red  [-] Puedes revisar como hacerlo en en https://victoravtr.github.io/posts/instalacion/ $Color_Off"
     exit 1
   else
     # Copiamos el archivo
@@ -381,7 +381,7 @@ echo -e "$Green [+] Sitio creado $Color_Off"
 echo -e "${Blue}\nComprobando instalacion de mysql: $Color_Off"
 if ! [ -x "$(command -v mysql)" ]; then
   echo -e "$Red [-] Error: mysql no esta instalado. $Color_Off"
-  echo -e "$Red [-] Puedes revisar como hacerlo en en http://$IP/posts/instalacion#mysql $Color_Off"
+  echo -e "$Red [-] Puedes revisar como hacerlo en en https://victoravtr.github.io/posts/instalacion/ $Color_Off"
   exit 1
 fi
 echo -e "$Green [+] mysql instalado. $Color_Off"
@@ -444,7 +444,7 @@ echo  -e "$Yellow     [+] Database: $DATABASE $Color_Off"
 
 if ! mysql --defaults-group-suffix=proyecto -e exit; then
   echo -e "$Red [-] Error: Algo ha salido mal. $Color_Off"
-  echo -e "$Red [-] Puedes revisar como hacerlo en http://$IP/posts/instalacion#mysql $Color_Off"
+  echo -e "$Red [-] Puedes revisar como hacerlo en https://victoravtr.github.io/posts/instalacion/ $Color_Off"
   exit 1
 fi
 
@@ -461,16 +461,6 @@ if ! [ -z "$(sudo mysql --defaults-group-suffix=proyecto -e $QUERY)" ]; then
 fi
 
 echo -e "$Green [+] Tablas comprobadas. $Color_Off"
-
-# Comprobamos si HUgo esta instalado
-echo -e "${Blue}\nComprobando instalacion de Hugo: $Color_Off"
-if ! [ -x "$(command -v hugo)" ]; then
-  echo -e "$Red [-] Error: hugo no esta instalado. $Color_Off"
-else
-  echo -e "$Green [+] Hugo instalado $Color_Off"
-fi
-echo  -e "$Yellow  [+] La instalacion de Hugo es necesaria solo si quieres tener acceso a la documentacion de forma local $Color_Off"
-echo  -e "$Yellow  [+] Dirigete a http://victoravtr.github.io/hugo para ver como $Color_Off"
 
 # Por ultimo, comprobamos que toda la estructura de carpetas en /etc/ y sus archivos se han creado bien
 # proyecto/mysql
