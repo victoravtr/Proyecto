@@ -10,5 +10,6 @@ create table RESET_PASS (
     codigo varchar(255) not null,
     fecha_peticion date,
     fecha_limite date,
-    constraint reset_pass_pk primary key(correo)
+    constraint reset_pass_pk primary key(codigo),
+    FOREIGN KEY(correo) REFERENCES CREDENCIALES(correo)
 );
