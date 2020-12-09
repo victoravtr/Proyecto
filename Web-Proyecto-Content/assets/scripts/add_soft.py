@@ -36,7 +36,7 @@ try:
         COINCIDENCIA = os.system("cat /var/proyecto/general/exe_switch | grep " + FILE)
         
         if PRODUCT_NAME != "" and COINCIDENCIA != "":
-            SWITCH = str(os.system("cat /var/proyecto/general/exe_switch | grep " + str(PRODUCT_NAME) + " | cut -d \":\" -f 2"))
+            SWITCH = str(os.system("cat /etc/proyecto/general/exe_switch | grep " + str(PRODUCT_NAME) + " | cut -d \":\" -f 2"))
         
         COMMAND = "Start-Process -FilePath " + URL_DESCARGA_CLIENT + " -ArgumentList " + SWITCH + " -PassThru -Verb runas"
         r = session.run_ps(COMMAND)
