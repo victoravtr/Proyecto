@@ -54,7 +54,7 @@ fi
 
 if [ $PREF_METHOD_CLI == "ssh" ]; then
     # Copiamos el script de instalacion y lo descargamos en el equipo objetivo
-    cp join_domain.ps1 /var/www/html/uploads/join_domain.ps1
+    cp /etc/proyecto/general/join_domain.ps1 /var/www/proyecto/uploads/join_domain.ps1
     if ! [ $? -eq 0 ]; then
         STR="$STR\n 1!@Fallo al copiar el archivo en /uploads."
         echo $STR
@@ -63,7 +63,7 @@ if [ $PREF_METHOD_CLI == "ssh" ]; then
 
     # Generamos un archivo con la pass y lo descargamos en el cliente
     # Una vez descargado lo borramos del servidor
-    echo $DOM_PASSWORD >/var/www/html/uploads/pass.txt
+    echo $DOM_PASSWORD >/var/www/proyecto/uploads/pass.txt
     COMMAND="curl -o C:\Users\\${CLI_USER}\\pass.txt http://${SERVER_IP}/uploads/pass.txt"
     RES=$(sshpass -p$CLI_PASSWORD ssh -t -o StrictHostKeyChecking=no $CLI_USER@$CLI_IP $COMMAND)
     if ! [ $? -eq 0 ]; then
@@ -73,7 +73,7 @@ if [ $PREF_METHOD_CLI == "ssh" ]; then
     fi
     STR="$STR\n 0!@Se descarga el archivo pass en el cliente."
 
-    rm /var/www/html/uploads/pass.txt
+    rm /var/www/proyecto/uploads/pass.txt
     if ! [ $? -eq 0 ]; then
         STR="$STR\n 1!@Fallo al borrar el archivo en /uploads."
         echo $STR
@@ -88,7 +88,7 @@ if [ $PREF_METHOD_CLI == "ssh" ]; then
         exit 1
     fi
     STR="$STR\n 0!@Se descarga el script de powershell en el cliente."
-    rm /var/www/html/uploads/join_domain.ps1
+    rm /var/www/proyecto/uploads/join_domain.ps1
 
     # Una vez descargado lo ejecutamos en el cliente
     COMMAND="powershell.exe C:\Users\\${CLI_USER}\\join_domain.ps1 $CLI_IP $DOM_IP $DOM_USER $DOM_PASSWORD $DOM_NAME"
