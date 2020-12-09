@@ -62,7 +62,7 @@ if (empty($usuario)) {
         if (!$error) {
             # Subimos el archivo al servidor
             array_push($res, "0!@Los datos del formulario son validos.");
-            $BASE_DIR = "/var/www/html/uploads/";
+            $BASE_DIR = "/var/www/proyecto/uploads/";
             $FILE_UPLOAD = $BASE_DIR . $file["name"];
             if (move_uploaded_file($file["tmp_name"], $FILE_UPLOAD)) {
                 array_push($res, "0!@Archivo subido al servidor.");
