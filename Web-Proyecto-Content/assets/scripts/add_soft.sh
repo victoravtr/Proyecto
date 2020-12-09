@@ -119,7 +119,7 @@ if [ "$SISTEMA" == "linux" ]; then
     exit 1
 
     # Borramos el archivo en el servidor
-    RES=$(rm /var/www/html//uploads/${FILE})
+    RES=$(rm /var/www/proyecto//uploads/${FILE})
     if ! [ $? -eq 0 ]; then
         STR="$STR\n 1!@Fallo al eliminar el archivo del servidor: $RES"
         echo $STR
@@ -151,23 +151,24 @@ if [ "$SISTEMA" == "windows" ]; then
             # SI hay alguna entrada, ponemos sus argumentos, si no ponemos los default
             DEFAULT_SWITCH="\"/qn\""
 
-            PRODUCTO_NAME="exiftool $FILE | grep \"Product Name\" | cut -d \":\" -f 2 | xargs"
-            COINCIDENCIA="cat /var/proyecto/general/exe_switch | grep $FILE"
-
+            PRODUCTO_NAME=$(exiftool /var/www/proyecto/uploads/$FILE | grep "Product Name" | cut -d ":" -f 2 | xargs)
+            COINCIDENCIA=$(cat /etc/proyecto/general/exe_switch | grep "$PRODUCTO_NAME")
+            
+ 
             if [ -n "$PRODUCTO_NAME" ]; then
+                echo "entra pri0" >> log.txt
                 if [ -n "$COINCIDENCIA" ]; then
-                    SWITCH="cat /var/proyecto/general/exe_switch | grep $PRODUCTO_NAME | cut -d \":\" -f 2"
-
+                    SWITCH=$(cat /etc/proyecto/general/exe_switch | grep "$PRODUCTO_NAME" | cut -d ":" -f 2)
+                    echo "entra sec" >> log.txt
                 else
                     SWITCH=$DEFAULT_SWITCH
                 fi
             else
                 SWITCH=$DEFAULT_SWITCH
             fi
-
             # Ejecutamos el archivo
             # Start-Process -FilePath C:\Users\victorav\chrome.exe -ArgumentList "/silent","/install" -PassThru -Verb runas;
-            COMMAND="Start-Process -FilePath \"C:\Users\\${USER}\\${FILE}\" -ArgumentList $SWITCH -PassThru -Verb runas"
+            COMMAND="\"C:\Users\\${USER}\\${FILE}\" \"$SWITCH\" -PassThru -Verb runAs"
             RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND)
             if ! [ $? -eq 0 ]; then
                 STR="$STR\n 1!@Fallo al instalar el archivo: $RES"
@@ -186,7 +187,7 @@ if [ "$SISTEMA" == "windows" ]; then
         STR="$STR\n 0!@Archivo instalado."
 
         # Una vez instalado borramos el archivo
-        COMMAND="rm \"C:\Users\\${USER}\\${FILE}\""
+        #COMMAND="rm \"C:\Users\\${USER}\\${FILE}\""
         RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND)
         if ! [ $? -eq 0 ]; then
             STR="$STR\n 1!@Fallo al eliminar el archivo del cliente: $RES"
@@ -194,7 +195,7 @@ if [ "$SISTEMA" == "windows" ]; then
             exit 1
         fi
         # Por ultimo lo borramos en el servidor
-        RES=$(rm /var/www/html/uploads/${FILE})
+        RES=$(rm /var/www/proyecto/uploads/${FILE})
         if ! [ $? -eq 0 ]; then
             STR="$STR\n 1!@Fallo al eliminar el archivo del servidor: $RES"
             echo $STR
@@ -205,7 +206,7 @@ if [ "$SISTEMA" == "windows" ]; then
     echo $STR
     exit 0
     if [ $PREF_METHOD == "winrm" ]; then
-        RES=$(python3 /var/www/assets/scripts/add_soft.py $IP $USER $PASS $FILE)
+        RES=$(python3 /var/www/proyecto/assets/scripts/add_soft.py $IP $USER $PASS $FILE)
         if ! [ $RES -eq 0 ]; then
             STR="$STR\n 1!@Fallo al instalar el archivo: $RES"
             echo $STR
