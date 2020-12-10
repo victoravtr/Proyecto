@@ -187,7 +187,7 @@ if [ "$SISTEMA" == "windows" ]; then
         STR="$STR\n 0!@Archivo instalado."
 
         # Una vez instalado borramos el archivo
-        #COMMAND="rm \"C:\Users\\${USER}\\${FILE}\""
+        COMMAND="rm \"C:\Users\\${USER}\\${FILE}\""
         RES=$(sshpass -p$PASS ssh -t -o StrictHostKeyChecking=no $USER@$IP $COMMAND)
         if ! [ $? -eq 0 ]; then
             STR="$STR\n 1!@Fallo al eliminar el archivo del cliente: $RES"
