@@ -1,14 +1,5 @@
 #!/bin/bash
 
-# Requisitos:
-# - apache2
-#  - archivo configuracion apache para web
-#  - archivo configuracion apache para documentacion
-# - hugo
-# - mysql
-# - php
-# - php-mysqli
-
 #COLORS
 # Reset
 Color_Off='\033[0m'       # Text Reset
