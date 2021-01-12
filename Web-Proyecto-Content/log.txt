@@ -1,6 +1,0 @@
-Opera Installer
-OperaSetup.exe
-Opera Installer:"/silent /allusers=yes /launchopera=no /desktopshortcut=yes /setdefaultbrowser=no /pintotaskbar=no /startmenushortcut=yes"
-entra pri0
-entra sec
-"/silent /allusers=yes /launchopera=no /desktopshortcut=yes /setdefaultbrowser=no /pintotaskbar=no /startmenushortcut=yes"
